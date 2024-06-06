@@ -1,6 +1,5 @@
 ﻿using BlackjackCalculator.Cards;
 using BlackjackCalculator.Utils;
-using System.Runtime.InteropServices;
 
 namespace BlackjackCalculator.Game
 {
