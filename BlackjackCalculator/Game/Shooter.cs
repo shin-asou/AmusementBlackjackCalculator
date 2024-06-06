@@ -22,6 +22,7 @@ namespace BlackjackCalculator.Game
         }
 
         public int Count => Cards.Count;
+        public bool IsEndGame => Count <= (EndDeckCount * Deck.MaxCount);
         private List<Card> Cards { get; }
         private int DeckCount { get; }
         private int EndDeckCount { get; }
