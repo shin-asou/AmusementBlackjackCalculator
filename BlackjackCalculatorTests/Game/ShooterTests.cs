@@ -1,9 +1,18 @@
-﻿using BlackjackCalculator.Factory;
+﻿using BlackjackCalculator.Cards;
+using BlackjackCalculator.Factory;
 namespace BlackjackCalculator.Game.Tests
 {
     [TestClass()]
     public class ShooterTests
     {
+        [TestMethod()]
+        public void CreateTest()
+        {
+            var shooter = ShooterFactory.BuildShooter(4, 1);
+            Assert.AreEqual(Deck.MaxCount * 4, shooter.Count);
+            Assert.ThrowsException<ArgumentException>(() => ShooterFactory.BuildShooter(4, 4));
+            Assert.ThrowsException<ArgumentException>(() => ShooterFactory.BuildShooter(4, 5));
+        }
         [TestMethod()]
         public void PullTest()
         {
