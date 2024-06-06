@@ -1,6 +1,5 @@
 ﻿using BlackjackCalculator.Game;
 using System.Collections.Frozen;
-using System.Data;
 
 namespace BlackjackCalculator.Factory
 {
