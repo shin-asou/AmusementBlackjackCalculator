@@ -20,7 +20,7 @@ namespace BlackjackCalculator.Factory
                 { GameResult.WinByAce2Six, new ResultPayout(false, 4, 5000 )},
             }.ToFrozenDictionary();
 
-            return new RuleSet(SurrenderType.Late, payoutTable);
+            return new RuleSet(SurrenderType.Late, payoutTable, 6, 1);
         }
     }
 }
