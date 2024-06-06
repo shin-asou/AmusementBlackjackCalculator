@@ -17,7 +17,7 @@
         Blackjack,
         SixUnder,
         Straight,
-        ThreeOfaKind,
+        ThreeSeven,
         Ace2Six
     }
     public enum GameResult
@@ -25,11 +25,18 @@
         WinByBlackjack,
         Win,
         Lose,
+        LoseBySurrender,
         Push,
         WinBySixUnder,
         WinByStraight,
         WinByThreeSeven,
         WinByAce2Six
+    }
+    public enum SurrenderType
+    {
+        No,
+        Late,
+        Early,
     }
 
     public class Blackjack
