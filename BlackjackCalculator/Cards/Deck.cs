@@ -1,11 +1,13 @@
-﻿namespace BlackjackCalculator.Cards
+﻿using BlackjackCalculator.Utils;
+
+namespace BlackjackCalculator.Cards
 {
     public class Deck
     {
         public Deck(bool isShuffle = true)
         {
             var cards = Create();
-            Cards = isShuffle ? Shuffle(cards) : cards;
+            Cards = isShuffle ? CardsUtil.Shuffle(cards) : cards;
         }
 
         public List<Card> Cards { get; }
@@ -20,12 +22,6 @@
                 result.AddRange(Card.CreateAllKindNumbers(suit));
             }
             return result;
-        }
-
-        // TODO: シャッフルの責任を持つ適切なクラスは？
-        private static List<Card> Shuffle(List<Card> deck)
-        {
-            return [.. deck.OrderBy(c => Guid.NewGuid())];
         }
     }
 }
