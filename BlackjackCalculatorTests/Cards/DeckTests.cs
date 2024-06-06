@@ -12,7 +12,7 @@
         private static void DeckCreateTest(Deck deck)
         {
             // 総数
-            Assert.AreEqual(deck.Count, 52);
+            Assert.AreEqual(deck.Count, Deck.MaxCount);
 
             // 各数値
             foreach (Card.Kind kind in Enum.GetValues(typeof(Card.Kind)))

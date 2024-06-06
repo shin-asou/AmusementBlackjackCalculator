@@ -4,6 +4,8 @@ namespace BlackjackCalculator.Cards
 {
     public class Deck
     {
+        public const int MaxCount = 52;
+
         public Deck(bool isShuffle = true)
         {
             var cards = Create();
