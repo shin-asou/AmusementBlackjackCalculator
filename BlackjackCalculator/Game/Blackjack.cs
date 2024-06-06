@@ -1,4 +1,8 @@
-﻿namespace BlackjackCalculator.Game
+﻿using BlackjackCalculator.Cards;
+using BlackjackCalculator.Factory;
+using BlackjackCalculator.Strategy;
+
+namespace BlackjackCalculator.Game
 {
     public enum HandAction
     {
@@ -48,6 +52,18 @@
     public class Blackjack
     {
 
+        // box数のカード+ディーラーのカードを引いてリストで返す
+        public static List<Card> FirstDealCardPull(Shooter shooter, int boxCount)
+        {
+            var result = new List<Card>();
+            // dealer用に1を足しておく
+            var boxCardCount = (1 + boxCount) * 2;
+            for (int i = 0; i < boxCardCount; i++)
+            {
+                result.Add(shooter.Pull());
+            }
+            return result;
+        }
     }
 }
 
