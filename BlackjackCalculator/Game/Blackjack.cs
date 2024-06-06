@@ -38,6 +38,12 @@
         Late,
         Early,
     }
+    public enum DoubledownType
+    {
+        AnyTwoCard,
+        Nine2Eleven,
+        Ten2Eleven,
+    }
 
     public class Blackjack
     {

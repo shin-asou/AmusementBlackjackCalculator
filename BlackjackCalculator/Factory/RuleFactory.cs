@@ -20,7 +20,17 @@ namespace BlackjackCalculator.Factory
                 { GameResult.WinByAce2Six, new ResultPayout(false, 4, 5000 )},
             }.ToFrozenDictionary();
 
-            return new RuleSet(SurrenderType.Late, payoutTable, 6, 1);
+            return new RuleSet(
+                isStandDealerSandSoftHand: true,
+                canDoubledownAfterSplit: true,
+                maxSplit: 4,
+                canResplitAces: false,
+                canHitSplitAces: false,
+                doubledown: DoubledownType.AnyTwoCard,
+                surrenderType: SurrenderType.Late,
+                payoutTable: payoutTable,
+                deckCount: 6,
+                endDeckCount: 1);
         }
     }
 }
