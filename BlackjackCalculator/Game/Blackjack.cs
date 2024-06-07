@@ -14,6 +14,13 @@ namespace BlackjackCalculator.Game
         HitOrDoubleDown,
         HitOrSurrender
     }
+    public enum GamePreAction
+    {
+        No,
+        Insurance,
+        EvenMoney,
+        Surrender,
+    }
     public enum HandResult
     {
         Value, // 21以下の数値かつ特殊役ではない
