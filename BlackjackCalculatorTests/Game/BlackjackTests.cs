@@ -27,7 +27,8 @@ namespace BlackjackCalculator.Game.Tests
             // 先頭はDealerStrategyで残りはPlayerStrategyである(もしくはその継承クラス)
             for (int i = 0; i < strategies.Count; i++)
             {
-                Assert.IsTrue((i == 0) ? strategies[i] is DealerStrategy : strategies[i] is PlayerStrategy);
+                var strategy = strategies[i];
+                Assert.IsTrue((i == 0) ? strategy is DealerStrategy : strategy is PlayerStrategy);
             }
         }
     }
