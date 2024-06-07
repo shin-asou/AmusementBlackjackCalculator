@@ -23,7 +23,7 @@ namespace BlackjackCalculator.Game
 
         public void Hit(Card newCard) => Cards.Add(newCard);
 
-        public int SofthandPairValue()
+        public int SoftHandPairValue()
         {
             if (!IsSoft) { throw new InvalidOperationException("this method call prerequisites IsSoft == true"); }
             return CalculateValueExcludeSoftHandAce();

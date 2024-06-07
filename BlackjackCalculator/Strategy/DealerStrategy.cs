@@ -14,7 +14,7 @@ namespace BlackjackCalculator.Strategy
             return Hand.IsDealerStand ? HandAction.Stand : HandAction.Hit;
         }
         // DealerはupCardを参照しないためupCardを必要とするメソッドをサポートしない
-        public override HandAction Action(Card upCard) { throw new NotSupportedException(); }
+        public override HandAction Action(Card upCard) => throw new NotSupportedException();
         public override HandResult Result()
         {
             if (Hand.IsBlackjack) return HandResult.Blackjack;

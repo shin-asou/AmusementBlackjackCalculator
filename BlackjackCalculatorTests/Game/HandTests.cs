@@ -179,19 +179,19 @@ namespace BlackjackCalculator.Game.Tests
         {
             var hand = HandFactory.Build(Card.Ace, Card.Nine);
             Assert.IsTrue(hand.IsSoft);
-            Assert.AreEqual(9, hand.SofthandPairValue());
+            Assert.AreEqual(9, hand.SoftHandPairValue());
 
             // 2 + 3 + A + A
             hand = HandFactory.Build(Card.Two, Card.Three);
             hand.Hit(Card.Ace);
             hand.Hit(Card.Ace);
             Assert.IsTrue(hand.IsSoft);
-            Assert.AreEqual(6, hand.SofthandPairValue());
+            Assert.AreEqual(6, hand.SoftHandPairValue());
 
             // exception
             hand = HandFactory.Build(Card.Three, Card.Three);
             Assert.IsFalse(hand.IsSoft);
-            Assert.ThrowsException<InvalidOperationException>(() => hand.SofthandPairValue());
+            Assert.ThrowsException<InvalidOperationException>(() => hand.SoftHandPairValue());
         }
 
         //----------- Test Helper

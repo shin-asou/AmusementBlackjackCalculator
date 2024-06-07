@@ -106,14 +106,14 @@ namespace BlackjackCalculator.Strategy
             var result = new Dictionary<int, HandAction>
             {
                 { 8, HandAction.Hit },
-                { 9, HandAction.Hit },
+                { 9, HandAction.HitOrDoubleDown },
                 { 10, HandAction.HitOrDoubleDown },
                 { 11, HandAction.HitOrDoubleDown },
-                { 12, HandAction.Hit },
-                { 13, HandAction.Hit },
-                { 14, HandAction.Hit },
-                { 15, HandAction.Hit },
-                { 16, HandAction.Hit },
+                { 12, HandAction.Stand },
+                { 13, HandAction.Stand },
+                { 14, HandAction.Stand },
+                { 15, HandAction.Stand },
+                { 16, HandAction.Stand },
                 { 17, HandAction.Stand },
             };
             return result.ToFrozenDictionary();
