@@ -10,7 +10,7 @@ namespace BlackjackCalculator.Strategy.Tests
         [TestMethod()]
         public void ActionExceptionTest()
         {
-            var player = new MockPlayerStrategy(HandFactory.Build(Card.Ten, Card.Ace));
+            var player = new MockPlayerStrategy(HandFactory.Build(Card.Ten, Card.Ace), RuleFactory.BuildBasicRule());
             Assert.ThrowsException<NotSupportedException>(() => player.Action());
         }
     }

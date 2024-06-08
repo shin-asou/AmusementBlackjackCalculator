@@ -3,7 +3,7 @@ using BlackjackCalculator.Game;
 
 namespace BlackjackCalculator.Strategy
 {
-    public partial class BasicStrategy(Hand hand) : PlayerStrategy(hand)
+    public partial class BasicStrategy(Hand hand, RuleSet rule) : PlayerStrategy(hand, rule)
     {
         public override HandAction Action(Card upCard)
         {

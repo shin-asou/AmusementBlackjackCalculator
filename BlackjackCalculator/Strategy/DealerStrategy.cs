@@ -6,7 +6,7 @@ namespace BlackjackCalculator.Strategy
     // Dealerのアクションクラス
     // ディーラーは17以上になるまで必ずHitし17以上の場合は必ずStand
     // softhand17(A+6)についてはHitしないものとする
-    public class DealerStrategy(Hand hand) : AbstractStrategy(hand)
+    public class DealerStrategy(Hand hand, RuleSet rule) : AbstractStrategy(hand, rule)
     {
         public Card UpCard => Hand.UpCard;
         public bool IsUpCardAce => Hand.IsUpCardAce;
