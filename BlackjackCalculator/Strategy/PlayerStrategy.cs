@@ -21,9 +21,9 @@ namespace BlackjackCalculator.Strategy
 
         public GamePreAction PreAction(Card upCard)
         {
-            PreActionResult = GamePreActionProc();
+            PreActionResult = GamePreActionProc(upCard);
             return PreActionResult;
         }
-        protected virtual GamePreAction GamePreActionProc() => GamePreAction.No;
+        protected virtual GamePreAction GamePreActionProc(Card upCard) => GamePreAction.No;
     }
 }

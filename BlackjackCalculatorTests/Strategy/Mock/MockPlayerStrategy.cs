@@ -11,7 +11,7 @@ namespace BlackjackCalculatorTests.Strategy.Mock
         private readonly GamePreAction _preAction = preAction;
         public override HandAction Action(Card upCard) { return HandAction.Stand; }
         public override HandResult Result() { return HandResult.Value; }
-        protected override GamePreAction GamePreActionProc() => _preAction;
+        protected override GamePreAction GamePreActionProc(Card upCard) => _preAction;
         public static MockPlayerStrategy Build(Card firstCard, Card secondCard, GamePreAction preAction = GamePreAction.No)
         {
             return new MockPlayerStrategy(HandFactory.Build(firstCard, secondCard), RuleFactory.BuildBasicRule(), preAction);
