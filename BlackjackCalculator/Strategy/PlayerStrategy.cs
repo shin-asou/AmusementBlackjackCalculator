@@ -18,5 +18,12 @@ namespace BlackjackCalculator.Strategy
             if (Hand.IsBlackjack) return HandResult.Blackjack;
             return (Hand.IsBurst) ? HandResult.Burst : HandResult.Value;
         }
+
+        public GamePreAction PreAction(Card upCard)
+        {
+            PreActionResult = GamePreActionProc();
+            return PreActionResult;
+        }
+        protected virtual GamePreAction GamePreActionProc() => GamePreAction.No;
     }
 }
