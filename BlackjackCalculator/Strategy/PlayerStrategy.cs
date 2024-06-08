@@ -3,7 +3,7 @@ using BlackjackCalculator.Game;
 
 namespace BlackjackCalculator.Strategy
 {
-    public abstract class PlayerStrategy(Hand hand) : AbstractStrategy(hand)
+    public abstract class PlayerStrategy(Hand hand, RuleSet rule) : AbstractStrategy(hand, rule)
     {
         public Card FirstCard => Hand.FirstCard;
         public Card SecondCard => Hand.SecondCard;
