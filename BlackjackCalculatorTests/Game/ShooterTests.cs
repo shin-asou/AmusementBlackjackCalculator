@@ -29,5 +29,22 @@ namespace BlackjackCalculator.Game.Tests
                 beforeCard = result;
             }
         }
+        [TestMethod()]
+        public void IsEndGameTest()
+        {
+            int deckCount = 6;
+            var shooter = ShooterFactory.BuildShooter(deckCount, 1);
+            for (int i = 0; i < (Deck.MaxCount * (deckCount - 1)); i++)
+            {
+                Assert.IsFalse(shooter.IsEndGame);
+                shooter.Pull();
+            }
+            for (int i = 0; i < Deck.MaxCount; i++)
+            {
+                Assert.IsTrue(shooter.IsEndGame);
+                shooter.Pull();
+            }
+            Assert.AreEqual(0, shooter.Count);
+        }
     }
 }
