@@ -6,6 +6,8 @@ namespace BlackjackCalculator.Strategy
     public abstract class AbstractStrategy(Hand hand)
     {
         protected Hand Hand { get; } = hand;
+        public bool IsBlackjack => Hand.IsBlackjack;
+        public bool IsNoBlackjack => !Hand.IsBlackjack;
         public abstract HandAction Action();
         public abstract HandAction Action(Card upCard);
         public abstract HandResult Result();

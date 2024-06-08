@@ -8,9 +8,10 @@ namespace BlackjackCalculator.Game
         public int SplitCount { get; } = splitCount;
 
         public int Count => Cards.Count;
-        private Card FirstCard => Cards[0];
-        private Card SecondCard => Cards[1];
+        public Card FirstCard => Cards[0];
+        public Card SecondCard => Cards[1];
         public Card UpCard => FirstCard;
+        public bool IsUpCardAce => UpCard.IsAce;
         private bool ExistsAce => Cards.Exists(card => card.IsAce);
         private bool FirstDeal => Cards.Count == 2;
         public bool IsMadeBySplit => SplitCount != 0;

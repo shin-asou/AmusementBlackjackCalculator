@@ -33,6 +33,7 @@ namespace BlackjackCalculator.Game
     }
     public enum GameResult
     {
+        No, // Preaction用まだゲーム中の状態
         WinByBlackjack,
         Win,
         Lose,
