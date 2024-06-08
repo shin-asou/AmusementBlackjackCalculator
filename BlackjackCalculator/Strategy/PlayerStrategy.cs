@@ -15,20 +15,20 @@ namespace BlackjackCalculator.Strategy
         public override HandAction Action() => throw new NotSupportedException();
         public override HandAction Action(Card upCard)
         {
-            // Acesスプリットによって作られていてかつルールが1CardOnly
             if (IsAcesSplit1CardOnly()) return HandAction.Stand;
-            if (Hand.IsPair)
-            {
-                var result = ActionByPairHand(upCard);
-                if (result == HandAction.Split)
-                {
-                    // されてる場合でSplitできない場合はそれぞれソフトハンド、ハードハンドへ移行(このときAとそれ以外のペアに注意)
-                    if (CanSplitHand()) return result;
-                    return ActionByNotPairHand(upCard);
-                }
-                return result;
-            }
+            if (Hand.IsPair) return PairHandFlow(upCard);
             return ActionByNotPairHand(upCard);
+        }
+        private HandAction PairHandFlow(Card upCard)
+        {
+            var result = ActionByPairHand(upCard);
+            if (result == HandAction.Split)
+            {
+                if (CanSplitHand()) return result;
+                // splitできない場合はペアでないハンドと同じ扱いをすることとする
+                return ActionByNotPairHand(upCard);
+            }
+            return result;
         }
         protected abstract HandAction ActionByPairHand(Card upCard);
         protected abstract HandAction ActionByNotPairHand(Card upCard);
