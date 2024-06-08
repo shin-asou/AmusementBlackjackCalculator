@@ -9,6 +9,9 @@ namespace BlackjackCalculator.Strategy
     public class DealerStrategy(Hand hand) : AbstractStrategy(hand)
     {
         public Card UpCard => Hand.UpCard;
+        public bool IsUpCardAce => Hand.IsUpCardAce;
+        public bool IsNotUpCardAce => !IsUpCardAce;
+
         public override HandAction Action()
         {
             return Hand.IsDealerStand ? HandAction.Stand : HandAction.Hit;

@@ -1,6 +1,4 @@
-using BlackjackCalculator.Cards;
 using BlackjackCalculator.Game;
-using BlackjackCalculator.Strategy;
 
 namespace AmusementBlackjackForm
 {
@@ -12,8 +10,8 @@ namespace AmusementBlackjackForm
         [STAThread]
         static void Main()
         {
-            var deck = new Deck();
-            var strategy = new BasicStrategy(new Hand(Card.Ten, Card.Nine));
+            var game = new Blackjack();
+            game.Flow();
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
