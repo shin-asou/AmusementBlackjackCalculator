@@ -14,11 +14,7 @@ namespace BlackjackCalculator.Game
         }
 
         private delegate GameResult PlayerPreActionDelegate(DealerStrategy dealer, PlayerStrategy player);
-        private static void UpCardActionPlayers(DealerStrategy dealer, List<PlayerStrategy> players, PlayerPreActionDelegate actionMethod)
-        {
-            players.ForEach(player => actionMethod(dealer, player));
-        }
-
+        private static void UpCardActionPlayers(DealerStrategy dealer, List<PlayerStrategy> players, PlayerPreActionDelegate actionMethod) => players.ForEach(player => actionMethod(dealer, player));
         public GameResult PreActionUpCardAce(DealerStrategy dealer, PlayerStrategy player)
         {
             player.PreAction(dealer.UpCard);
