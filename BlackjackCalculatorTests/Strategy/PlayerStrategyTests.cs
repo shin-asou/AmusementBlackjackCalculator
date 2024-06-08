@@ -1,5 +1,4 @@
 ﻿using BlackjackCalculator.Cards;
-using BlackjackCalculator.Factory;
 using BlackjackCalculatorTests.Strategy.Mock;
 
 namespace BlackjackCalculator.Strategy.Tests
