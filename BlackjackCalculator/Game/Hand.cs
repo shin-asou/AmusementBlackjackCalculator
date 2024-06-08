@@ -6,14 +6,14 @@ namespace BlackjackCalculator.Game
     {
         private List<Card> Cards { get; } = [first, second];
         public int SplitCount { get; } = splitCount;
-
+        public bool IsDoubleDown { get; private set; } = false;
         public int Count => Cards.Count;
         public Card FirstCard => Cards[0];
         public Card SecondCard => Cards[1];
         public Card UpCard => FirstCard;
         public bool IsUpCardAce => UpCard.IsAce;
         private bool ExistsAce => Cards.Exists(card => card.IsAce);
-        private bool FirstDeal => Cards.Count == 2;
+        public bool FirstDeal => Cards.Count == 2;
         public bool IsMadeBySplit => SplitCount != 0;
         public bool IsMadeByAcesSplit => IsMadeBySplit && FirstCard.IsAce;
         public bool IsPair => FirstDeal && FirstCard.Type == SecondCard.Type;
@@ -24,6 +24,11 @@ namespace BlackjackCalculator.Game
         public bool IsBurst => Value() > 21;
 
         public void Hit(Card newCard) => Cards.Add(newCard);
+        public void DoubleDown(Card newCard)
+        {
+            IsDoubleDown = true;
+            Hit(newCard);
+        }
 
         public int SoftHandPairValue()
         {

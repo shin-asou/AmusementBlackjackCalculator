@@ -1,5 +1,7 @@
-﻿using BlackjackCalculator.Factory;
+﻿using BlackjackCalculator.Cards;
+using BlackjackCalculator.Factory;
 using BlackjackCalculator.Strategy;
+using BlackjackCalculatorTests.Strategy.Mock;
 
 namespace BlackjackCalculator.Game.Tests
 {
@@ -30,6 +32,22 @@ namespace BlackjackCalculator.Game.Tests
                 var strategy = strategies[i];
                 Assert.IsTrue((i == 0) ? strategy is DealerStrategy : strategy is PlayerStrategy);
             }
+        }
+
+        [TestMethod()]
+        public void PlayerActionTest()
+        {
+            var rule = RuleFactory.BuildBasicRule();
+            var shooter = ShooterFactory.BuildShooter(rule.DeckCount, rule.EndDeckCount);
+            var player = MockPlayerStrategy.Build(Card.Ten, Card.Queen);
+            Assert.AreEqual(HandAction.Stand, Blackjack.PlayerAction(rule, player, Card.Ten, shooter));
+            // BJ => stand
+            player = MockPlayerStrategy.Build(Card.Ten, Card.Ace, notPairAction: HandAction.Hit);
+            Assert.AreEqual(HandAction.Stand, Blackjack.PlayerAction(rule, player, Card.Ten, shooter));
+
+            player = MockPlayerStrategy.Build(Card.Nine, Card.Five, notPairAction: HandAction.Hit);
+            player.Hit(Card.Queen);
+            Assert.AreEqual(HandAction.Stand, Blackjack.PlayerAction(rule, player, Card.Ten, shooter));
         }
     }
 }

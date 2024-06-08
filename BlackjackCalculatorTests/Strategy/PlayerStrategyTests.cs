@@ -74,7 +74,50 @@ namespace BlackjackCalculator.Strategy.Tests
             Assert.AreEqual(HandAction.HitOrDoubleDown, player.Action(Card.Ace));
             player = MockPlayerStrategy.Build(Card.Jack, Card.Six, notPairAction: HandAction.Hit);
             Assert.AreEqual(HandAction.Hit, player.Action(Card.Ace));
+        }
 
+        [TestMethod()]
+        public void CanNotHitTest()
+        {
+            var player = MockPlayerStrategy.Build(Card.Ace, Card.Jack);
+            Assert.IsTrue(player.CanNotHit());
+            // 20
+            player = MockPlayerStrategy.Build(Card.Ten, Card.Jack);
+            Assert.IsFalse(player.CanNotHit());
+            // AcesSplit 1Card Only
+            player = MockPlayerStrategy.Build(Card.Ace, Card.Nine, splitCount: 1);
+            Assert.IsTrue(player.CanNotHit());
+            // A+9
+            player = MockPlayerStrategy.Build(Card.Ace, Card.Nine);
+            Assert.IsFalse(player.CanNotHit());
+            // 22
+            player = MockPlayerStrategy.Build(Card.Ten, Card.Nine);
+            player.Hit(Card.Three);
+            Assert.IsTrue(player.CanNotHit());
+            // doubledown 
+            player = MockPlayerStrategy.Build(Card.Two, Card.Nine);
+            player.DoubleDown(Card.Two);
+            Assert.IsTrue(player.CanNotHit());
+            // 3 count
+            player = MockPlayerStrategy.Build(Card.Five, Card.Nine);
+            player.Hit(Card.Three);
+            Assert.IsFalse(player.CanNotHit());
+        }
+
+        [TestMethod()]
+        public void CanDoubleDownTest()
+        {
+            // TODO: doubledownTypeとSplitAfterDouble無しのテストを書いていない
+            var player = MockPlayerStrategy.Build(Card.Five, Card.Six);
+            Assert.IsTrue(player.CanDoubleDown());
+            player = MockPlayerStrategy.Build(Card.Ace, Card.Ten);
+            Assert.IsFalse(player.CanDoubleDown());
+            player = MockPlayerStrategy.Build(Card.Two, Card.Six);
+            player.Hit(Card.Two);
+            Assert.IsFalse(player.CanDoubleDown());
+            // split after doubledown 
+            player = MockPlayerStrategy.Build(Card.Six, Card.Two, splitCount: 1);
+            Assert.IsTrue(player.CanDoubleDown());
         }
     }
 }

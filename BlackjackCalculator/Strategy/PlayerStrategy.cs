@@ -37,17 +37,35 @@ namespace BlackjackCalculator.Strategy
             if (Hand.IsBlackjack) return HandResult.Blackjack;
             return (Hand.IsBurst) ? HandResult.Burst : HandResult.Value;
         }
+
+        public bool CanNotHit()
+        {
+            return (Hand.IsBurst || Hand.IsDoubleDown || IsAcesSplit1CardOnly() || Hand.IsBlackjack);
+        }
+        public bool CanDoubleDown()
+        {
+            return !(
+                (CanNotHit() || !Hand.FirstDeal) ||
+                (!Rule.CanDoubledownAfterSplit && Hand.IsMadeBySplit) ||
+                (Rule.Doubledown == DoubledownType.Ten2Eleven && (Math.Clamp(Hand.Value(), 10, 11) != Hand.Value())) ||
+                (Rule.Doubledown == DoubledownType.Nine2Eleven && (Math.Clamp(Hand.Value(), 9, 11) != Hand.Value()))
+            );
+        }
         protected bool IsAcesSplit1CardOnly() => Hand.IsMadeByAcesSplit && !Rule.CanHitSplitAces;
         protected bool CanSplitHand()
         {
             if (Hand.IsMadeByAcesSplit && !Rule.CanResplitAces) return false;
             return Hand.SplitCount < Rule.MaxSplit;
         }
+        public bool CanSurrender => Hand.FirstDeal;
+
         public GamePreAction PreAction(Card upCard)
         {
             PreActionResult = GamePreActionProc(upCard);
             return PreActionResult;
         }
         protected virtual GamePreAction GamePreActionProc(Card upCard) => GamePreAction.No;
+
+        public void DoubleDown(Card card) => Hand.DoubleDown(card);
     }
 }

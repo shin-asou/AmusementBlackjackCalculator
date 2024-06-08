@@ -1,5 +1,9 @@
-﻿using BlackjackCalculator.Cards;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BlackjackCalculator.Game;
+using BlackjackCalculator.Cards;
 using BlackjackCalculator.Factory;
+using BlackjackCalculatorTests.Strategy.Mock;
+using System.Numerics;
 
 namespace BlackjackCalculator.Game.Tests
 {
@@ -21,6 +25,16 @@ namespace BlackjackCalculator.Game.Tests
             hand.Hit(CreateCard());
             Assert.AreEqual(4, hand.Count);
         }
+
+        [TestMethod()]
+        public void DoubleDownTest()
+        {
+            var hand = CreateHand();
+            hand.DoubleDown(Card.Two);
+            Assert.IsTrue(hand.IsDoubleDown);
+            Assert.AreEqual(3, hand.Count);
+        }
+
         [TestMethod()]
         public void SplitCountTest()
         {

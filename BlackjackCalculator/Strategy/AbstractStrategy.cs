@@ -12,6 +12,6 @@ namespace BlackjackCalculator.Strategy
         public abstract HandAction Action();
         public abstract HandAction Action(Card upCard);
         public abstract HandResult Result();
-        public void Hit(Card card) { Hand.Hit(card); }
+        public void Hit(Card card) => Hand.Hit(card);
     }
 }
