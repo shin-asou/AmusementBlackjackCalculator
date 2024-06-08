@@ -14,11 +14,14 @@ namespace BlackjackCalculatorTests.Strategy.Mock
 
         protected override HandAction ActionByPairHand(Card upCard) => _pairAction;
         protected override HandAction ActionByNotPairHand(Card upCard) => _notPairAction;
-        public override HandResult Result() { return HandResult.Value; }
         protected override GamePreAction GamePreActionProc(Card upCard) => _preAction;
+        public static MockPlayerStrategy Build(Card firstCard, Card secondCard, int splitCount, GamePreAction preAction = GamePreAction.No, HandAction pairAction = HandAction.Split, HandAction notPairAction = HandAction.Stand)
+        {
+            return new MockPlayerStrategy(HandFactory.Build(firstCard, secondCard, splitCount), RuleFactory.BuildBasicRule(), preAction, pairAction, notPairAction);
+        }
         public static MockPlayerStrategy Build(Card firstCard, Card secondCard, GamePreAction preAction = GamePreAction.No, HandAction pairAction = HandAction.Split, HandAction notPairAction = HandAction.Stand)
         {
-            return new MockPlayerStrategy(HandFactory.Build(firstCard, secondCard), RuleFactory.BuildBasicRule(), preAction, pairAction, notPairAction);
+            return Build(firstCard, secondCard, 0, preAction, pairAction, notPairAction);
         }
     }
 }
