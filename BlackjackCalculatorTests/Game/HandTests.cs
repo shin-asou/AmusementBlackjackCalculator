@@ -21,6 +21,16 @@ namespace BlackjackCalculator.Game.Tests
             hand.Hit(CreateCard());
             Assert.AreEqual(4, hand.Count);
         }
+
+        [TestMethod()]
+        public void DoubleDownTest()
+        {
+            var hand = CreateHand();
+            hand.DoubleDown(Card.Two);
+            Assert.IsTrue(hand.IsDoubleDown);
+            Assert.AreEqual(3, hand.Count);
+        }
+
         [TestMethod()]
         public void SplitCountTest()
         {

@@ -80,22 +80,22 @@ namespace BlackjackCalculator.Game
         // GameSequence
         // FirstDeal カードを配る (ついでにプレイヤーとディーラーのストラテジーを作る
         // DealerPreAction ディーラーBlackjackチェック + プレイヤー側のプレアクション(イーブンマネー等)
-        // ---- プレイヤーごとのアクション
+        // PlayerAction プレイヤーごとのアクション
         // ---- プレイヤースプリット処理
         // ---- 結果に応じて配当
         public static void GameSequence(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
         {
             // DealerBlackjack + Early Surrender Check
             DealerPreAction(rule, dealer, players);
-            PlayerAction(dealer, players, shooter);
+            PlayersAction(rule, dealer, players, shooter);
         }
 
-        private static void PlayerAction(DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
+        private static void PlayersAction(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
         {
             while (players.Count > 0)
             {
                 var player = players.First();
-                HandAction action = PlayerAction(player, dealer.UpCard, shooter);
+                HandAction action = PlayerAction(rule, player, dealer.UpCard, shooter);
                 if (action == HandAction.Split)
                 {
                     players.Insert(1, CreatePlayerStrategy(player.FirstCard, shooter.Pull()));
@@ -113,16 +113,20 @@ namespace BlackjackCalculator.Game
         }
 
         // 再帰以外で返るのはHandAction.Stand or HandAction.Surrender or HandAction.Split
-        public static HandAction PlayerAction(PlayerStrategy player, Card upCard, Shooter shooter)
+        public static HandAction PlayerAction(RuleSet rule, PlayerStrategy player, Card upCard, Shooter shooter)
         {
             HandAction result = player.Action(upCard);
-            if (result == HandAction.Hit || result == HandAction.HitOrDoubleDown || result == HandAction.DoubleDown)
+            if (player.CanNotHit() || result == HandAction.Stand) return HandAction.Stand;
+            if (IsPlayerActionSurrender(rule, player, result)) return HandAction.Surrender;
+            if (result == HandAction.Split) return HandAction.Split;
+            if (IsPlayerActionDoubleDown(player, result))
             {
-                player.Hit(shooter.Pull());
-                if (HandResult.Burst == player.Result()) return HandAction.Stand;
-                return PlayerAction(player, upCard, shooter);
+                player.DoubleDown(shooter.Pull());
+                return HandAction.Stand;
             }
-            return result;
+            // Hit SurrenderType == No でもHitOrSurrenderしかないのでここで強制的に引く
+            player.Hit(shooter.Pull());
+            return PlayerAction(rule, player, upCard, shooter);
         }
 
         // 先頭がdealerのハンド、残りがプレーヤーのハンドのstrategyリストを返す
@@ -170,6 +174,16 @@ namespace BlackjackCalculator.Game
                 result.Add(strategy);
             }
             return result;
+        }
+
+        private static bool IsPlayerActionSurrender(RuleSet rule, PlayerStrategy player, HandAction result)
+        {
+            return result == HandAction.HitOrSurrender && rule.Surrender == SurrenderType.Late && player.CanSurrender;
+        }
+
+        private static bool IsPlayerActionDoubleDown(PlayerStrategy player, HandAction result)
+        {
+            return (result == HandAction.HitOrDoubleDown || result == HandAction.DoubleDown) && player.CanDoubleDown();
         }
 
         // 任意のfactoryに差し替える仕組みをいれることによって各アクションの多様性を担保できる
