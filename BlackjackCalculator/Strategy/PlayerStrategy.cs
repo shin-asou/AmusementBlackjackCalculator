@@ -1,4 +1,5 @@
-﻿using BlackjackCalculator.Game;
+﻿using BlackjackCalculator.Cards;
+using BlackjackCalculator.Game;
 
 namespace BlackjackCalculator.Strategy
 {
