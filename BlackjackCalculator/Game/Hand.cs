@@ -15,6 +15,7 @@ namespace BlackjackCalculator.Game
         private bool ExistsAce => Cards.Exists(card => card.IsAce);
         private bool FirstDeal => Cards.Count == 2;
         public bool IsMadeBySplit => SplitCount != 0;
+        public bool IsMadeByAcesSplit => IsMadeBySplit && FirstCard.IsAce;
         public bool IsPair => FirstDeal && FirstCard.Type == SecondCard.Type;
         // Aceを含みAce1枚を除いた合計が10以下、つまりAceを11として扱った場合でも21以下になる状態をソフトハンドと判定
         public bool IsSoft => ExistsAce && (CalculateValueExcludeSoftHandAce() <= 10);

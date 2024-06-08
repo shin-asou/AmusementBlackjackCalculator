@@ -18,7 +18,12 @@ namespace BlackjackCalculator.Strategy
             if (Hand.IsBlackjack) return HandResult.Blackjack;
             return (Hand.IsBurst) ? HandResult.Burst : HandResult.Value;
         }
-
+        protected bool IsAcesSplit1CardOnly() => Hand.IsMadeByAcesSplit && !Rule.CanHitSplitAces;
+        protected bool CanSplitHand()
+        {
+            if (Hand.IsMadeByAcesSplit && !Rule.CanResplitAces) return false;
+            return Hand.SplitCount < Rule.MaxSplit;
+        }
         public GamePreAction PreAction(Card upCard)
         {
             PreActionResult = GamePreActionProc(upCard);
