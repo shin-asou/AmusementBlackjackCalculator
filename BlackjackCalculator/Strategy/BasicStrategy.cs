@@ -5,20 +5,12 @@ namespace BlackjackCalculator.Strategy
 {
     public partial class BasicStrategy(Hand hand, RuleSet rule) : PlayerStrategy(hand, rule)
     {
-        public override HandAction Action(Card upCard)
+        protected override HandAction ActionByPairHand(Card upCard)
         {
-            if (Hand.IsPair)
-            {
-                var result = ReferencePairHandStrategy(upCard);
-                if (result == HandAction.Split)
-                {
-                    // TODO: splitの場合はルール的にスプリットできるかをチェックする必要がある 
-                    // AAのSplitで1CardOnlyの場合やSplit回数限度が決まっている場合
-                    // 上記の懸念は置いといてテストを先に書くのが良い可能性
-                    throw new NotImplementedException();
-                }
-                return result;
-            }
+            return ReferencePairHandStrategy(upCard);
+        }
+        protected override HandAction ActionByNotPairHand(Card upCard)
+        {
             return Hand.IsSoft ? ReferenceSoftHandStrategy(upCard) : ReferenceHardHandStrategy(upCard);
         }
 

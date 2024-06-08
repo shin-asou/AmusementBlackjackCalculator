@@ -13,6 +13,25 @@ namespace BlackjackCalculator.Strategy
         public bool IsPreActionSurrender => PreActionResult == GamePreAction.Surrender;
         // Player は必ずupCardを知っているためupCardを取らないメソッドをサポートしない
         public override HandAction Action() => throw new NotSupportedException();
+        public override HandAction Action(Card upCard)
+        {
+            // Acesスプリットによって作られていてかつルールが1CardOnly
+            if (IsAcesSplit1CardOnly()) return HandAction.Stand;
+            if (Hand.IsPair)
+            {
+                var result = ActionByPairHand(upCard);
+                if (result == HandAction.Split)
+                {
+                    // されてる場合でSplitできない場合はそれぞれソフトハンド、ハードハンドへ移行(このときAとそれ以外のペアに注意)
+                    if (CanSplitHand()) return result;
+                    return ActionByNotPairHand(upCard);
+                }
+                return result;
+            }
+            return ActionByNotPairHand(upCard);
+        }
+        protected abstract HandAction ActionByPairHand(Card upCard);
+        protected abstract HandAction ActionByNotPairHand(Card upCard);
         public override HandResult Result()
         {
             if (Hand.IsBlackjack) return HandResult.Blackjack;
