@@ -1,9 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BlackjackCalculator.Game;
-using BlackjackCalculator.Cards;
+﻿using BlackjackCalculator.Cards;
 using BlackjackCalculator.Factory;
-using BlackjackCalculatorTests.Strategy.Mock;
-using System.Numerics;
 
 namespace BlackjackCalculator.Game.Tests
 {
