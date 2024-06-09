@@ -24,7 +24,7 @@ namespace BlackjackCalculator.Game.Tests
             var rule = RuleFactory.BuildBasicRule();
             var shooter = ShooterFactory.BuildShooter(rule.DeckCount, rule.EndDeckCount);
             var boxCount = 4;
-            var strategies = Blackjack.FirstDeal(shooter, boxCount);
+            var strategies = Blackjack.FirstDeal(rule, shooter, boxCount);
             Assert.AreEqual((boxCount + 1), strategies.Count);
             // 先頭はDealerStrategyで残りはPlayerStrategyである(もしくはその継承クラス)
             for (int i = 0; i < strategies.Count; i++)

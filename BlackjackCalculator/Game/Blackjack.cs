@@ -80,31 +80,75 @@ namespace BlackjackCalculator.Game
         // GameSequence
         // FirstDeal カードを配る (ついでにプレイヤーとディーラーのストラテジーを作る
         // DealerPreAction ディーラーBlackjackチェック + プレイヤー側のプレアクション(イーブンマネー等)
+        // PlayersAction プレイヤースプリット処理
         // PlayerAction プレイヤーごとのアクション
-        // ---- プレイヤースプリット処理
+        // ---- ディーラーアクション
         // ---- 結果に応じて配当
-        public static void GameSequence(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
+        public static List<PlayerStrategy> GameSequence(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
         {
             // DealerBlackjack + Early Surrender Check
             DealerPreAction(rule, dealer, players);
-            PlayersAction(rule, dealer, players, shooter);
+            var result = PlayersAction(rule, dealer, players, shooter);
+            // 現在は暫定的にプレイヤーリストを返すが最終的には配当リストを返す
+            return result;
         }
 
-        private static void PlayersAction(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
+        public static List<PlayerStrategy> PlayersAction(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
         {
+            var result = new List<PlayerStrategy>();
             while (players.Count > 0)
             {
                 var player = players.First();
-                HandAction action = PlayerAction(rule, player, dealer.UpCard, shooter);
+                var action = PlayerAction(rule, player, dealer.UpCard, shooter);
                 if (action == HandAction.Split)
                 {
-                    players.Insert(1, CreatePlayerStrategy(player.FirstCard, shooter.Pull()));
-                    // ここはまだ間違っていて1つ目のスプリットハンドを引ききってからpullしないといけない
-                    players.Insert(2, CreatePlayerStrategy(player.SecondCard, shooter.Pull()));
+                    var splitTree = CreateSplitTree(rule, player, shooter);
+                    PlayerActionBySplit(rule, dealer.UpCard, shooter, splitTree[0], 0, splitTree, true);
+                    result.AddRange(splitTree.Where(usePlayer => !usePlayer.IsNull));
+                }
+                else
+                {
+                    result.Add(player);
                 }
                 players.RemoveAt(0);
             }
+
+            return result;
         }
+
+        private static List<PlayerStrategy> CreateSplitTree(RuleSet rule, PlayerStrategy player, Shooter shooter)
+        {
+            var result = new List<PlayerStrategy>();
+            for (var i = 0; i < rule.MaxSplit; i++)
+            {
+                result.Add(CreateNullPlayerStrategy(player.FirstCard, i + 1));
+            }
+            result[0] = CreatePlayerStrategy(result[0].FirstCard, shooter.Pull(), rule, 1);
+            return result;
+        }
+
+        private static void PlayerActionBySplit(RuleSet rule, Card upCard, Shooter shooter, PlayerStrategy player, int treeIndex, List<PlayerStrategy> splitTree, bool isFromSplit)
+        {
+            var action = PlayerAction(rule, player, upCard, shooter);
+            if (splitTree.All(strategy => !strategy.IsNull)) return;
+            if (action == HandAction.Split)
+            {
+                int index = splitTree.FindIndex(split => split.IsNull);
+                splitTree[index] = CreatePlayerStrategy(player.FirstCard, shooter.Pull(), rule, index + 1);
+                if (splitTree.All(strategy => !strategy.IsNull)) splitTree.ForEach(strategy => strategy.IsMaxSplitTree = true);
+                PlayerActionBySplit(rule, upCard, shooter, splitTree[index], index, splitTree, true);
+            }
+            else
+            {
+                if (isFromSplit)
+                {
+                    int nextIndex = treeIndex + 1;
+                    splitTree[nextIndex] = CreatePlayerStrategy(player.FirstCard, shooter.Pull(), rule, nextIndex);
+                    PlayerActionBySplit(rule, upCard, shooter, splitTree[nextIndex], nextIndex, splitTree, false);
+                }
+            }
+        }
+
 
         public static void DealerPreAction(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players)
         {
@@ -130,7 +174,7 @@ namespace BlackjackCalculator.Game
         }
 
         // 先頭がdealerのハンド、残りがプレーヤーのハンドのstrategyリストを返す
-        public static List<AbstractStrategy> FirstDeal(Shooter shooter, int boxCount)
+        public static List<AbstractStrategy> FirstDeal(RuleSet rule, Shooter shooter, int boxCount)
         {
             var result = new List<AbstractStrategy>();
             var dealHand = FirstDealCardPull(shooter, boxCount);
@@ -139,10 +183,10 @@ namespace BlackjackCalculator.Game
             // 0, 1, 2*,3,4,5*
             // もしboxCount = 3の場合
             // 0, 1, 2,3*,4,5,6,7*
-            result.Add(CreateDealerStrategy(dealHand[halfCount - 1], dealHand[^1]));
+            result.Add(CreateDealerStrategy(dealHand[halfCount - 1], dealHand[^1], rule: rule));
             for (int i = 0; i < boxCount; i++)
             {
-                result.Add(CreatePlayerStrategy(dealHand[i], dealHand[i + halfCount]));
+                result.Add(CreatePlayerStrategy(dealHand[i], dealHand[i + halfCount], rule: rule));
             }
             return result;
         }
@@ -187,15 +231,16 @@ namespace BlackjackCalculator.Game
         }
 
         // 任意のfactoryに差し替える仕組みをいれることによって各アクションの多様性を担保できる
-        protected static DealerStrategy CreateDealerStrategy(Card firstCard, Card secondCard) => StrategyFactory.BuildDealer(firstCard, secondCard);
+        protected static DealerStrategy CreateDealerStrategy(Card firstCard, Card secondCard, RuleSet rule) => StrategyFactory.BuildDealer(firstCard, secondCard, rule);
         // player strategy Create
-        protected static PlayerStrategy CreatePlayerStrategy(Card firstCard, Card secondCard) => StrategyFactory.BuildBasic(firstCard, secondCard);
+        protected static PlayerStrategy CreatePlayerStrategy(Card firstCard, Card secondCard, RuleSet rule, int splitCount = 0) => StrategyFactory.BuildBasic(firstCard, secondCard, rule, splitCount: splitCount);
+        private static PlayerStrategy CreateNullPlayerStrategy(Card firstCard, int splitCount) => StrategyFactory.BuildNullPlayer(firstCard, splitCount);
 
         public static BlackjackRecord CreateBlackjackRecord(int boxCount)
         {
             var rule = RuleFactory.BuildBasicRule();
             var shooter = ShooterFactory.BuildShooter(rule.DeckCount, rule.EndDeckCount);
-            var boxes = FirstDeal(shooter, boxCount);
+            var boxes = FirstDeal(rule, shooter, boxCount);
             var dealer = PullDealerStrategy(boxes);
             var players = CastListAbstractStrategy2PlayerStrategy(boxes);
             return new BlackjackRecord(

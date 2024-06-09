@@ -5,9 +5,12 @@ namespace BlackjackCalculator.Strategy
 {
     public abstract class PlayerStrategy(Hand hand, RuleSet rule) : AbstractStrategy(hand, rule)
     {
+        public virtual bool IsNull => false;
         public Card FirstCard => Hand.FirstCard;
         public Card SecondCard => Hand.SecondCard;
         public GamePreAction PreActionResult { get; private set; } = GamePreAction.No;
+        // これだけは嫌だが
+        public bool IsMaxSplitTree { get; set; }
         public bool IsEvenMoney => PreActionResult == GamePreAction.EvenMoney;
         public bool IsInsurance => PreActionResult == GamePreAction.Insurance;
         public bool IsPreActionSurrender => PreActionResult == GamePreAction.Surrender;
@@ -55,6 +58,7 @@ namespace BlackjackCalculator.Strategy
         protected bool CanSplitHand()
         {
             if (Hand.IsMadeByAcesSplit && !Rule.CanResplitAces) return false;
+            if (IsMaxSplitTree) return false;
             return Hand.SplitCount < Rule.MaxSplit;
         }
         public bool CanSurrender => Hand.FirstDeal;
