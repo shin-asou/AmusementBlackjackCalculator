@@ -99,20 +99,33 @@ namespace BlackjackCalculator.Game
             while (players.Count > 0)
             {
                 var player = players.First();
-                var action = PlayerAction(rule, player, dealer.UpCard, shooter);
-                if (action == HandAction.Split)
+                if (player.IsEndByPreAction() || dealer.IsBlackjack)
                 {
-                    var splitTree = CreateSplitTree(rule, player, shooter);
-                    PlayerActionBySplit(rule, dealer.UpCard, shooter, splitTree[0], 0, splitTree, true);
-                    result.AddRange(splitTree.Where(usePlayer => !usePlayer.IsNull));
+                    result.Add(player);
                 }
                 else
                 {
-                    result.Add(player);
+                    result = PlayerActionMain(rule, dealer, shooter, result, player);
                 }
                 players.RemoveAt(0);
             }
 
+            return result;
+        }
+
+        private static List<PlayerStrategy> PlayerActionMain(RuleSet rule, DealerStrategy dealer, Shooter shooter, List<PlayerStrategy> result, PlayerStrategy player)
+        {
+            var action = PlayerAction(rule, player, dealer.UpCard, shooter);
+            if (action == HandAction.Split)
+            {
+                var splitTree = CreateSplitTree(rule, player, shooter);
+                PlayerActionBySplit(rule, dealer.UpCard, shooter, splitTree[0], 0, splitTree, true);
+                result.AddRange(splitTree.Where(usePlayer => !usePlayer.IsNull));
+            }
+            else
+            {
+                result.Add(player);
+            }
             return result;
         }
 
