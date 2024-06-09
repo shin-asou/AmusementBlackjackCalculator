@@ -63,6 +63,12 @@ namespace BlackjackCalculator.Strategy
         }
         public bool CanSurrender => Hand.FirstDeal;
 
+        public bool IsEndByPreAction()
+        {
+            return PreActionResult != GamePreAction.EvenMoney && 
+                PreActionResult != GamePreAction.Surrender;
+        }
+
         public GamePreAction PreAction(Card upCard)
         {
             PreActionResult = GamePreActionProc(upCard);
