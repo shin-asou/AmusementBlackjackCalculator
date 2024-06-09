@@ -26,6 +26,7 @@ namespace BlackjackCalculator.Factory
                 maxSplit: 4,
                 canResplitAces: false,
                 canHitSplitAces: false,
+                isMadeBySplitBlackjackPayoutAddon: false,
                 doubledown: DoubledownType.AnyTwoCard,
                 surrenderType: SurrenderType.Late,
                 payoutTable: payoutTable,

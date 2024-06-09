@@ -5,13 +5,14 @@ namespace BlackjackCalculator.Game
     // 標準的なBlackjackのルールを定義する
     // odds calculatorの内容をベースにアミューズ系を追加
     // 参考:https://wizardofodds.com/games/blackjack/calculator/
-    public class RuleSet(bool isStandDealerSandSoftHand, bool canDoubledownAfterSplit, int maxSplit, bool canResplitAces, bool canHitSplitAces, DoubledownType doubledown, SurrenderType surrenderType, FrozenDictionary<GameResult, ResultPayout> payoutTable, int deckCount, int endDeckCount)
+    public class RuleSet(bool isStandDealerSandSoftHand, bool canDoubledownAfterSplit, int maxSplit, bool canResplitAces, bool canHitSplitAces, bool isMadeBySplitBlackjackPayoutAddon, DoubledownType doubledown, SurrenderType surrenderType, FrozenDictionary<GameResult, ResultPayout> payoutTable, int deckCount, int endDeckCount)
     {
         public bool IsStandDealerSandSoftHand { get; } = isStandDealerSandSoftHand;
         public bool CanDoubledownAfterSplit { get; } = canDoubledownAfterSplit;
         public int MaxSplit { get; } = maxSplit;
         public bool CanResplitAces { get; } = canResplitAces;
         public bool CanHitSplitAces { get; } = canHitSplitAces;
+        public bool IsMadeBySplitBlackjackPayoutAddon { get; } = isMadeBySplitBlackjackPayoutAddon;
         public DoubledownType Doubledown { get; } = doubledown;
         public SurrenderType Surrender { get; } = surrenderType;
         public FrozenDictionary<GameResult, ResultPayout> ResultPayout { get; } = payoutTable;
