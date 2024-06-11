@@ -1,6 +1,6 @@
-﻿using BlackjackCalculator.Cards;
-using BlackjackCalculator.Factory;
+﻿using BlackjackCalculator.Factory;
 using BlackjackCalculator.Game;
+using BlackjackCalculator.Item;
 using BlackjackCalculator.Strategy;
 
 namespace BlackjackCalculatorTests.Strategy.Mock

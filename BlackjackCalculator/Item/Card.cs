@@ -1,6 +1,6 @@
-﻿using static BlackjackCalculator.Cards.Card;
+﻿using static BlackjackCalculator.Item.Card;
 
-namespace BlackjackCalculator.Cards
+namespace BlackjackCalculator.Item
 {
     public class Card(Card.Kind type, int value, SuitType suit)
     {
