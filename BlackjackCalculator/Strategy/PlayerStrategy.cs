@@ -1,5 +1,5 @@
-﻿using BlackjackCalculator.Cards;
-using BlackjackCalculator.Game;
+﻿using BlackjackCalculator.Game;
+using BlackjackCalculator.Item;
 
 namespace BlackjackCalculator.Strategy
 {
@@ -65,7 +65,7 @@ namespace BlackjackCalculator.Strategy
 
         public bool IsEndByPreAction()
         {
-            return PreActionResult != GamePreAction.EvenMoney && 
+            return PreActionResult != GamePreAction.EvenMoney &&
                 PreActionResult != GamePreAction.Surrender;
         }
 

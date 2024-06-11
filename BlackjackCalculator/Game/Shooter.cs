@@ -1,4 +1,4 @@
-﻿using BlackjackCalculator.Cards;
+﻿using BlackjackCalculator.Item;
 using BlackjackCalculator.Utils;
 
 namespace BlackjackCalculator.Game
@@ -14,7 +14,7 @@ namespace BlackjackCalculator.Game
             if (DeckCount <= EndDeckCount) throw new ArgumentException("deckCount > endDeckCount");
         }
 
-        public Card Pull()
+        public virtual Card Pull()
         {
             var result = Cards.First();
             Cards.RemoveAt(0);
@@ -22,10 +22,10 @@ namespace BlackjackCalculator.Game
         }
 
         public int Count => Cards.Count;
-        public bool IsEndGame => Count <= (EndDeckCount * Deck.MaxCount);
+        public bool IsEndGame => Count <= EndDeckCount * Deck.MaxCount;
         private List<Card> Cards { get; }
-        private int DeckCount { get; }
-        private int EndDeckCount { get; }
+        protected int DeckCount { get; }
+        protected int EndDeckCount { get; }
         private List<Card> Create()
         {
             var result = new List<Card>();

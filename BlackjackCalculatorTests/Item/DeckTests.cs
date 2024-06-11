@@ -1,4 +1,4 @@
-﻿namespace BlackjackCalculator.Cards.Tests
+﻿namespace BlackjackCalculator.Item.Tests
 {
     [TestClass()]
     public class DeckTests

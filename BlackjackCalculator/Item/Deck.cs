@@ -1,6 +1,6 @@
 ﻿using BlackjackCalculator.Utils;
 
-namespace BlackjackCalculator.Cards
+namespace BlackjackCalculator.Item
 {
     public class Deck
     {
