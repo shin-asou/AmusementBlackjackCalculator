@@ -1,4 +1,4 @@
-﻿using BlackjackCalculator.Game;
+﻿using BlackjackCalculator.Item;
 
 namespace BlackjackCalculator.Factory
 {
