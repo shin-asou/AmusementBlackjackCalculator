@@ -1,7 +1,6 @@
-﻿using BlackjackCalculator.Item;
-using BlackjackCalculator.Utils;
+﻿using BlackjackCalculator.Utils;
 
-namespace BlackjackCalculator.Game
+namespace BlackjackCalculator.Item
 {
     // Deckシューター
     public class Shooter
