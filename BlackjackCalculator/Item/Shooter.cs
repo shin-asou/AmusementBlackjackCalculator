@@ -9,7 +9,6 @@ namespace BlackjackCalculator.Item
         {
             DeckCount = deckCount;
             EndDeckCount = endDeckCount;
-            Cards = Create();
             if (DeckCount <= EndDeckCount) throw new ArgumentException("deckCount > endDeckCount");
         }
 
@@ -22,10 +21,12 @@ namespace BlackjackCalculator.Item
 
         public int Count => Cards.Count;
         public bool IsEndGame => Count <= EndDeckCount * Deck.MaxCount;
-        private List<Card> Cards { get; }
+        protected List<Card> Cards { get; set; } = [];
         protected int DeckCount { get; }
         protected int EndDeckCount { get; }
-        private List<Card> Create()
+
+        public virtual void Build() => Cards = CreateCards();
+        protected List<Card> CreateCards()
         {
             var result = new List<Card>();
             for (int i = 0; i < DeckCount; i++)
