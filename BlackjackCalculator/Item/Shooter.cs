@@ -26,7 +26,7 @@ namespace BlackjackCalculator.Item
         protected int EndDeckCount { get; }
 
         public virtual void Build() => Cards = CreateCards();
-        private List<Card> CreateCards()
+        protected List<Card> CreateCards()
         {
             var result = new List<Card>();
             for (int i = 0; i < DeckCount; i++)
