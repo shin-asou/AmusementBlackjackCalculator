@@ -49,5 +49,39 @@ namespace BlackjackCalculator.Game.Tests
             player.Hit(Card.Queen);
             Assert.AreEqual(HandAction.Stand, Blackjack.PlayerAction(rule, player, Card.Ten, shooter));
         }
+
+        [TestMethod()]
+        public void PlayersActionTest()
+        {
+            // PlayersAction(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
+            // PlayersActionのテストを書くためにshooterに細工が必要なのでCheatShooterを作る
+            List<Card> cards = [
+                Card.Eight, Card.Nine, // dealer 
+                Card.Ten, Card.Ace, // player
+                Card.Eight, Card.Eight, // player
+                Card.Ace, Card.Ace, // player
+                Card.Nine, Card.Ten, // player
+                Card.Eight, // split one 3
+                Card.Eight, // split two 4
+                Card.Eight, // can't split
+                Card.Four, // hit
+                Card.King, // 2
+                Card.Queen, // 3
+                Card.Nine, // 4
+                Card.Ace, // cat't resplit Aces
+                ];
+
+            var rule = RuleFactory.BuildBasicRule();
+            var shooter = ShooterFactory.BuildCheatShooter(rule.DeckCount, rule.EndDeckCount, cards);
+            var dealer = StrategyFactory.BuildDealer(shooter.Pull(), shooter.Pull());
+            List<PlayerStrategy> players = [];
+            players.Add(StrategyFactory.BuildBasic(shooter.Pull(), shooter.Pull()));
+            players.Add(StrategyFactory.BuildBasic(shooter.Pull(), shooter.Pull()));
+            players.Add(StrategyFactory.BuildBasic(shooter.Pull(), shooter.Pull()));
+            players.Add(StrategyFactory.BuildBasic(shooter.Pull(), shooter.Pull()));
+
+            var result = Blackjack.PlayersAction(rule, dealer, players, shooter);
+            Assert.AreEqual(8, result.Count);
+        }
     }
 }

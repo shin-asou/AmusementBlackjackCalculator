@@ -118,13 +118,30 @@ namespace BlackjackCalculator.Game
             var action = PlayerAction(rule, player, dealer.UpCard, shooter);
             if (action == HandAction.Split)
             {
-                var splitTree = CreateSplitTree(rule, player, shooter);
-                PlayerActionBySplit(rule, dealer.UpCard, shooter, splitTree[0], 0, splitTree, true);
+                List<PlayerStrategy> splitTree = SplitTreeAction(rule, dealer, shooter, player);
                 result.AddRange(splitTree.Where(usePlayer => !usePlayer.IsNull));
             }
             else
             {
                 result.Add(player);
+            }
+            return result;
+        }
+
+        private static List<PlayerStrategy> SplitTreeAction(RuleSet rule, DealerStrategy dealer, Shooter shooter, PlayerStrategy player)
+        {
+            var result = CreateSplitTree(rule, player, shooter);
+            for (var i = 0; i < result.Count; i++)
+            {
+                var strategy = result[i];
+                if (strategy.IsNull) continue;
+                // blankCardがあったら作りなおす
+                if (strategy.IsBlank)
+                {
+                    result[i] = CreatePlayerStrategy(strategy.FirstCard, shooter.Pull(), rule, i + 1);
+                    strategy = result[i];
+                }
+                PlayerActionBySplit(rule, dealer.UpCard, shooter, strategy, i, result);
             }
             return result;
         }
@@ -136,32 +153,28 @@ namespace BlackjackCalculator.Game
             {
                 result.Add(CreateNullPlayerStrategy(player.FirstCard, i + 1));
             }
-            result[0] = CreatePlayerStrategy(result[0].FirstCard, shooter.Pull(), rule, 1);
+            result[0] = CreatePlayerStrategy(player.FirstCard, shooter.Pull(), rule, 1);
+            result[1] = CreatePlayerStrategy(player.SecondCard, BlankCard.Build(), rule, 2);
             return result;
         }
 
-        private static void PlayerActionBySplit(RuleSet rule, Card upCard, Shooter shooter, PlayerStrategy player, int treeIndex, List<PlayerStrategy> splitTree, bool isFromSplit)
+        private static void PlayerActionBySplit(RuleSet rule, Card upCard, Shooter shooter, PlayerStrategy player, int treeIndex, List<PlayerStrategy> splitTree)
         {
             var action = PlayerAction(rule, player, upCard, shooter);
             if (splitTree.All(strategy => !strategy.IsNull)) return;
             if (action == HandAction.Split)
             {
-                int index = splitTree.FindIndex(split => split.IsNull);
-                splitTree[index] = CreatePlayerStrategy(player.FirstCard, shooter.Pull(), rule, index + 1);
+                var tempSecondCard = player.SecondCard;
+                splitTree[treeIndex] = CreatePlayerStrategy(player.FirstCard, shooter.Pull(), rule, treeIndex);
+                player = splitTree[treeIndex];
+                // Splitされた次のboxのためにnullStrategyではなくBlankCardを持つデータを作っておく
+                int nextIndex = splitTree.FindIndex(split => split.IsNull);
+                splitTree[nextIndex] = CreatePlayerStrategy(tempSecondCard, BlankCard.Build(), rule, nextIndex + 1);
                 if (splitTree.All(strategy => !strategy.IsNull)) splitTree.ForEach(strategy => strategy.IsMaxSplitTree = true);
-                PlayerActionBySplit(rule, upCard, shooter, splitTree[index], index, splitTree, true);
-            }
-            else
-            {
-                if (isFromSplit)
-                {
-                    int nextIndex = treeIndex + 1;
-                    splitTree[nextIndex] = CreatePlayerStrategy(player.FirstCard, shooter.Pull(), rule, nextIndex);
-                    PlayerActionBySplit(rule, upCard, shooter, splitTree[nextIndex], nextIndex, splitTree, false);
-                }
+                // ここは次のカードではなく今のカードのアクションをしなければいけない
+                PlayerActionBySplit(rule, upCard, shooter, player, treeIndex, splitTree);
             }
         }
-
 
         public static void DealerPreAction(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players)
         {

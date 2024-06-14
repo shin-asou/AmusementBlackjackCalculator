@@ -65,8 +65,8 @@ namespace BlackjackCalculator.Strategy
 
         public bool IsEndByPreAction()
         {
-            return PreActionResult != GamePreAction.EvenMoney &&
-                PreActionResult != GamePreAction.Surrender;
+            return PreActionResult == GamePreAction.EvenMoney ||
+                PreActionResult == GamePreAction.Surrender;
         }
 
         public GamePreAction PreAction(Card upCard)

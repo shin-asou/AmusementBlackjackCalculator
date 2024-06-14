@@ -7,6 +7,7 @@ namespace BlackjackCalculator.Strategy
     {
         protected RuleSet Rule { get; } = rule;
         protected Hand Hand { get; } = hand;
+        public bool IsBlank => Hand.IsBlank;
         public bool IsBlackjack => Hand.IsBlackjack;
         public bool IsNoBlackjack => !Hand.IsBlackjack;
         public abstract HandAction Action();
