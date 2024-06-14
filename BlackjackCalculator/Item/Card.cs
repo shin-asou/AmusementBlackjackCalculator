@@ -4,6 +4,7 @@ namespace BlackjackCalculator.Item
 {
     public class Card(Card.Kind type, int value, SuitType suit)
     {
+        public virtual bool IsBlank => false;
         public enum Kind
         {
             Ace,
