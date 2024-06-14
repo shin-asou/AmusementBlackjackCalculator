@@ -6,7 +6,8 @@ namespace BlackjackCalculator.Game
     {
         private List<Card> Cards { get; } = [first, second];
         public int SplitCount { get; } = splitCount;
-        public bool IsDoubleDown { get; private set; } = false;
+        public bool IsBlank => Cards.Any(c => c.IsBlank);
+
         public int Count => Cards.Count;
         public Card FirstCard => Cards[0];
         public Card SecondCard => Cards[1];
@@ -14,6 +15,8 @@ namespace BlackjackCalculator.Game
         public bool IsUpCardAce => UpCard.IsAce;
         private bool ExistsAce => Cards.Exists(card => card.IsAce);
         public bool FirstDeal => Cards.Count == 2;
+
+        public bool IsDoubleDown { get; private set; } = false;
         public bool IsMadeBySplit => SplitCount != 0;
         public bool IsMadeByAcesSplit => IsMadeBySplit && FirstCard.IsAce;
         public bool IsPair => FirstDeal && FirstCard.Type == SecondCard.Type;
