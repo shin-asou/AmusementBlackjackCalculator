@@ -1,4 +1,5 @@
 ﻿using BlackjackCalculator.Item;
+using static BlackjackCalculator.Item.Card;
 
 namespace BlackjackCalculator.Game
 {
@@ -22,10 +23,38 @@ namespace BlackjackCalculator.Game
         public bool IsPair => FirstDeal && FirstCard.Type == SecondCard.Type;
         // Aceを含みAce1枚を除いた合計が10以下、つまりAceを11として扱った場合でも21以下になる状態をソフトハンドと判定
         public bool IsSoft => ExistsAce && (CalculateValueExcludeSoftHandAce() <= 10);
-        public int DealerStandValue => 17;
+        public static int DealerStandValue => 17;
         public bool IsSoftDealerStandValue => IsSoft && Value() == DealerStandValue;
         public bool IsDealerStand => Value() >= DealerStandValue;
         public bool IsBlackjack => FirstDeal && Value() == 21;
+        public bool IsStraight
+        {
+            get
+            {
+                return Count == 3 &&
+                    Cards.Any(c => c.Type == Kind.Six) &&
+                    Cards.Any(c => c.Type == Kind.Seven) &&
+                    Cards.Any(c => c.Type == Kind.Eight);
+            }
+        }
+        public bool IsThreeSeven => Count == 3 && Cards.All(c => c.Type == Kind.Seven);
+        public bool IsSixUnder => Count == 6 && !IsBurst;
+        public bool IsSevenUnder => Count == 7 && !IsBurst;
+        public bool IsEightUnder => Count >= 8 && !IsBurst;
+        public bool IsAce2Six
+        {
+            get
+            {
+                return Count == 6 &&
+                    Cards.Any(c => c.IsAce) &&
+                    Cards.Any(c => c.Type == Kind.Two) &&
+                    Cards.Any(c => c.Type == Kind.Three) &&
+                    Cards.Any(c => c.Type == Kind.Four) &&
+                    Cards.Any(c => c.Type == Kind.Five) &&
+                    Cards.Any(c => c.Type == Kind.Six);
+            }
+        }
+
         public bool IsBurst => Value() > 21;
 
         public void Hit(Card newCard) => Cards.Add(newCard);
