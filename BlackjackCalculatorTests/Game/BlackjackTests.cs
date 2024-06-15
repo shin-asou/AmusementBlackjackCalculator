@@ -1,7 +1,10 @@
-﻿using BlackjackCalculator.Factory;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BlackjackCalculator.Game;
+using BlackjackCalculator.Factory;
 using BlackjackCalculator.Item;
 using BlackjackCalculator.Strategy;
 using BlackjackCalculatorTests.Strategy.Mock;
+using System.Data;
 
 namespace BlackjackCalculator.Game.Tests
 {
@@ -82,6 +85,26 @@ namespace BlackjackCalculator.Game.Tests
 
             var result = Blackjack.PlayersAction(rule, dealer, players, shooter);
             Assert.AreEqual(8, result.Count);
+        }
+
+        [TestMethod()]
+        public void DealerActionTest()
+        {
+            var rule = RuleFactory.BuildBasicRule();
+            var shooter = ShooterFactory.BuildCheatShooter(rule.DeckCount, rule.EndDeckCount, [Card.Seven, Card.Ten]);
+            var dealer = StrategyFactory.BuildDealer(shooter.Pull(), shooter.Pull());
+            Blackjack.DealerAction(dealer, shooter);
+            Assert.AreEqual(17, dealer.Value);
+
+            shooter = ShooterFactory.BuildCheatShooter(rule.DeckCount, rule.EndDeckCount, [Card.Seven, Card.Two, Card.Seven, Card.Two]);
+            dealer = StrategyFactory.BuildDealer(shooter.Pull(), shooter.Pull());
+            Blackjack.DealerAction(dealer, shooter);
+            Assert.AreEqual(18, dealer.Value);
+
+            shooter = ShooterFactory.BuildCheatShooter(rule.DeckCount, rule.EndDeckCount, [Card.Seven, Card.Two, Card.Seven, Card.Queen]);
+            dealer = StrategyFactory.BuildDealer(shooter.Pull(), shooter.Pull());
+            Blackjack.DealerAction(dealer, shooter);
+            Assert.AreEqual(26, dealer.Value);
         }
     }
 }

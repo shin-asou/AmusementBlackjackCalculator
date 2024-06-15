@@ -40,6 +40,8 @@ namespace BlackjackCalculator.Game
         LoseBySurrender,
         Push,
         WinBySixUnder,
+        WinBySevenUnder,
+        WinByEightUnder,
         WinByStraight,
         WinByThreeSeven,
         WinByAce2Six
@@ -82,15 +84,26 @@ namespace BlackjackCalculator.Game
         // DealerPreAction ディーラーBlackjackチェック + プレイヤー側のプレアクション(イーブンマネー等)
         // PlayersAction プレイヤースプリット処理
         // PlayerAction プレイヤーごとのアクション
-        // ---- ディーラーアクション
+        // DealerAction ディーラーアクション
         // ---- 結果に応じて配当
         public static List<PlayerStrategy> GameSequence(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
         {
             // DealerBlackjack + Early Surrender Check
             DealerPreAction(rule, dealer, players);
             var result = PlayersAction(rule, dealer, players, shooter);
+            DealerAction(dealer, shooter);
             // 現在は暫定的にプレイヤーリストを返すが最終的には配当リストを返す
             return result;
+        }
+
+        public static void DealerAction(DealerStrategy dealer, Shooter shooter)
+        {
+            var actionResult = HandAction.Hit;
+            while (actionResult != HandAction.Stand)
+            {
+                actionResult = dealer.Action();
+                if (actionResult == HandAction.Hit) dealer.Hit(shooter.Pull());
+            }
         }
 
         public static List<PlayerStrategy> PlayersAction(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
@@ -194,7 +207,7 @@ namespace BlackjackCalculator.Game
                 player.DoubleDown(shooter.Pull());
                 return HandAction.Stand;
             }
-            // Hit SurrenderType == No でもHitOrSurrenderしかないのでここで強制的に引く
+            // TODO: Hit SurrenderType == No でもHitOrSurrenderしかないのでここで強制的に引く
             player.Hit(shooter.Pull());
             return PlayerAction(rule, player, upCard, shooter);
         }

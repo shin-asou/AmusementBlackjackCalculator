@@ -14,6 +14,7 @@ namespace BlackjackCalculator.Strategy
 
         public override HandAction Action()
         {
+            if (!Rule.IsStandValueDealerSoftHand && Hand.IsSoftDealerStandValue) return HandAction.Hit;
             return Hand.IsDealerStand ? HandAction.Stand : HandAction.Hit;
         }
         // DealerはupCardを参照しないためupCardを必要とするメソッドをサポートしない
