@@ -35,11 +35,20 @@ namespace BlackjackCalculator.Strategy
         }
         protected abstract HandAction ActionByPairHand(Card upCard);
         protected abstract HandAction ActionByNotPairHand(Card upCard);
+        // ここではルール上採用されているハンドかは無視して設定する
         public override HandResult Result()
         {
+            // Ace to Six が先でないと6underと判定されるので注意
+            if (Hand.IsAce2Six) return HandResult.Ace2Six;
             if (Hand.IsBlackjack) return HandResult.Blackjack;
+            if (Hand.IsStraight) return HandResult.Straight;
+            if (Hand.IsThreeSeven) return HandResult.ThreeSeven;
+            if (Hand.IsSixUnder) return HandResult.SixUnder;
+            if (Hand.IsSevenUnder) return HandResult.SevenUnder;
+            if (Hand.IsEightUnder) return HandResult.EightUnder;
             return (Hand.IsBurst) ? HandResult.Burst : HandResult.Value;
         }
+        public bool IsSpecialHand => Hand.IsSpecial;
 
         public bool CanNotHit()
         {

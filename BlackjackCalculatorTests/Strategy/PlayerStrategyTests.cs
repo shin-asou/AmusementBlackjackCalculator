@@ -35,10 +35,38 @@ namespace BlackjackCalculator.Strategy.Tests
             // 22
             player.Hit(Card.Five);
             Assert.AreEqual(HandResult.Burst, player.Result());
+            // 21 9x4x8
+            player = MockPlayerStrategy.Build(Card.Nine, Card.Four);
+            player.Hit(Card.Eight);
+            Assert.AreEqual(HandResult.Value, player.Result());
             // 21 6x7x8
             player = MockPlayerStrategy.Build(Card.Six, Card.Seven);
             player.Hit(Card.Eight);
-            Assert.AreEqual(HandResult.Value, player.Result());
+            Assert.AreEqual(HandResult.Straight, player.Result());
+            // 21 7x7x7
+            player = MockPlayerStrategy.Build(Card.Seven, Card.Seven);
+            player.Hit(Card.Seven);
+            Assert.AreEqual(HandResult.ThreeSeven, player.Result());
+            // 6under
+            player = MockPlayerStrategy.Build(Card.Two, Card.Two);
+            player.Hit(Card.Three);
+            player.Hit(Card.Three);
+            player.Hit(Card.Three);
+            player.Hit(Card.Two);
+            Assert.AreEqual(HandResult.SixUnder, player.Result());
+            // 7under
+            player.Hit(Card.Two);
+            Assert.AreEqual(HandResult.SevenUnder, player.Result());
+            // 8 under
+            player.Hit(Card.Two);
+            Assert.AreEqual(HandResult.EightUnder, player.Result());
+            // Ace to Six
+            player = MockPlayerStrategy.Build(Card.Ace, Card.Two);
+            player.Hit(Card.Three);
+            player.Hit(Card.Four);
+            player.Hit(Card.Five);
+            player.Hit(Card.Six);
+            Assert.AreEqual(HandResult.Ace2Six, player.Result());
         }
 
         [TestMethod()]
