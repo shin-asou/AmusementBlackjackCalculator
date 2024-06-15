@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BlackjackCalculator.Game;
-using BlackjackCalculator.Factory;
+﻿using BlackjackCalculator.Factory;
 using BlackjackCalculator.Item;
 
 namespace BlackjackCalculator.Game.Tests
@@ -172,6 +170,16 @@ namespace BlackjackCalculator.Game.Tests
             hand.Hit(Card.Ace);
             hand.Hit(Card.Queen);
             Assert.IsFalse(hand.IsEightUnder);
+            // 9枚以上は 8Under
+            hand = HandFactory.Build(Card.Two, Card.Three);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Ace);
+            Assert.IsTrue(hand.IsEightUnder);
         }
         [TestMethod()]
         public void IsAce2SixTest()

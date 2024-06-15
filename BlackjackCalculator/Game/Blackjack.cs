@@ -27,6 +27,8 @@ namespace BlackjackCalculator.Game
         Burst,
         Blackjack,
         SixUnder,
+        SevenUnder,
+        EightUnder,
         Straight,
         ThreeSeven,
         Ace2Six

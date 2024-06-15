@@ -54,6 +54,7 @@ namespace BlackjackCalculator.Game
                     Cards.Any(c => c.Type == Kind.Six);
             }
         }
+        public bool IsSpecial => IsBlackjack || IsStraight || IsThreeSeven || IsSixUnder || IsSevenUnder || IsEightUnder || IsAce2Six;
 
         public bool IsBurst => Value() > 21;
 
