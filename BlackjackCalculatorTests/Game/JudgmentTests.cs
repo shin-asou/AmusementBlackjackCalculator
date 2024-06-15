@@ -80,28 +80,28 @@ namespace BlackjackCalculator.Game.Tests
             // BJ vs BJ no evenmoney
             player.PreAction(dealer.UpCard);
             var result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Push, result.GameResult);
+            Assert.AreEqual(GameResult.Push, result.Result);
             // BJ vs BJ evenmoney
             player = MockPlayerStrategy.Build(Card.Jack, Card.Ace, preAction: GamePreAction.EvenMoney);
             player.PreAction(dealer.UpCard);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Win, result.GameResult);
+            Assert.AreEqual(GameResult.Win, result.Result);
             // BJ vs EarlySurrender
             player = MockPlayerStrategy.Build(Card.Jack, Card.Six, preAction: GamePreAction.Surrender);
             player.PreAction(dealer.UpCard);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.LoseBySurrender, result.GameResult);
+            Assert.AreEqual(GameResult.LoseBySurrender, result.Result);
             // BJ vs Insurance
             player = MockPlayerStrategy.Build(Card.Jack, Card.Six, preAction: GamePreAction.Insurance);
             player.PreAction(dealer.UpCard);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Push, result.GameResult);
+            Assert.AreEqual(GameResult.Push, result.Result);
             Assert.IsTrue(result.IsSuccessInsurance);
             // BJ vs No
             player = MockPlayerStrategy.Build(Card.Jack, Card.Eight);
             player.PreAction(dealer.UpCard);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Lose, result.GameResult);
+            Assert.AreEqual(GameResult.Lose, result.Result);
 
             // dealer no blackjack
 
@@ -109,28 +109,28 @@ namespace BlackjackCalculator.Game.Tests
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.King);
             player = MockPlayerStrategy.Build(Card.Ace, Card.Ten);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.WinByBlackjack, result.GameResult);
+            Assert.AreEqual(GameResult.WinByBlackjack, result.Result);
             // 20 vs 678 to 21 no valid rule
             player = MockPlayerStrategy.Build(Card.Six, Card.Seven);
             player.Hit(Card.Eight);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Win, result.GameResult);
+            Assert.AreEqual(GameResult.Win, result.Result);
             // 21vs
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.Six);
             dealer.Hit(Card.Five);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Push, result.GameResult);
+            Assert.AreEqual(GameResult.Push, result.Result);
             // 20 vs 777 to 21 no valid rule
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.King);
             player = MockPlayerStrategy.Build(Card.Seven, Card.Seven);
             player.Hit(Card.Seven);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Win, result.GameResult);
+            Assert.AreEqual(GameResult.Win, result.Result);
             // 21 vs
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.Six);
             dealer.Hit(Card.Five);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Push, result.GameResult);
+            Assert.AreEqual(GameResult.Push, result.Result);
             // 20 vs Ace to Six no valid rule
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.King);
             player = MockPlayerStrategy.Build(Card.Ace, Card.Two);
@@ -139,12 +139,12 @@ namespace BlackjackCalculator.Game.Tests
             player.Hit(Card.Five);
             player.Hit(Card.Six);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Win, result.GameResult);
+            Assert.AreEqual(GameResult.Win, result.Result);
             // vs 21
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.Six);
             dealer.Hit(Card.Five);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Push, result.GameResult);
+            Assert.AreEqual(GameResult.Push, result.Result);
 
             // 20 vs 14 6under no valid rule
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.King);
@@ -154,15 +154,15 @@ namespace BlackjackCalculator.Game.Tests
             player.Hit(Card.Three);
             player.Hit(Card.Four);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Lose, result.GameResult);
+            Assert.AreEqual(GameResult.Lose, result.Result);
             // 20 vs 17 7under no valid rule
             player.Hit(Card.Three);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Lose, result.GameResult);
+            Assert.AreEqual(GameResult.Lose, result.Result);
             // 20 vs 17 8under no valid rule
             player.Hit(Card.Three);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Push, result.GameResult);
+            Assert.AreEqual(GameResult.Push, result.Result);
 
             // 21 vs 678 to 21
             judgement = new Judgment(RuleFactory.Build(RuleFactory.BuildAllValidHandPayoutTable()));
@@ -171,12 +171,12 @@ namespace BlackjackCalculator.Game.Tests
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.Six);
             dealer.Hit(Card.Five);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.WinByStraight, result.GameResult);
+            Assert.AreEqual(GameResult.WinByStraight, result.Result);
             // 21 vs 777 too 21
             player = MockPlayerStrategy.Build(Card.Seven, Card.Seven);
             player.Hit(Card.Seven);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.WinByThreeSeven, result.GameResult);
+            Assert.AreEqual(GameResult.WinByThreeSeven, result.Result);
             // 21 vs Ace to Six
             player = MockPlayerStrategy.Build(Card.Ace, Card.Two);
             player.Hit(Card.Three);
@@ -184,7 +184,7 @@ namespace BlackjackCalculator.Game.Tests
             player.Hit(Card.Five);
             player.Hit(Card.Six);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.WinByAce2Six, result.GameResult);
+            Assert.AreEqual(GameResult.WinByAce2Six, result.Result);
             // 21 vs 6under
             player = MockPlayerStrategy.Build(Card.Ace, Card.Two);
             player.Hit(Card.Two);
@@ -192,15 +192,15 @@ namespace BlackjackCalculator.Game.Tests
             player.Hit(Card.Three);
             player.Hit(Card.Four);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.WinBySixUnder, result.GameResult);
+            Assert.AreEqual(GameResult.WinBySixUnder, result.Result);
             // 21 vs 7under
             player.Hit(Card.Three);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.WinBySevenUnder, result.GameResult);
+            Assert.AreEqual(GameResult.WinBySevenUnder, result.Result);
             // 21 vs 7under
             player.Hit(Card.Four);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.WinByEightUnder, result.GameResult);
+            Assert.AreEqual(GameResult.WinByEightUnder, result.Result);
 
             // burst vs burst
             player = MockPlayerStrategy.Build(Card.Seven, Card.Seven);
@@ -208,33 +208,33 @@ namespace BlackjackCalculator.Game.Tests
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.Six);
             player.Hit(Card.Jack);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Lose, result.GameResult);
+            Assert.AreEqual(GameResult.Lose, result.Result);
             // burst vs 14
             player = MockPlayerStrategy.Build(Card.Seven, Card.Seven);
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.Six);
             dealer.Hit(Card.Jack);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Win, result.GameResult);
+            Assert.AreEqual(GameResult.Win, result.Result);
             // 18 vs 19
             player = MockPlayerStrategy.Build(Card.Seven, Card.Seven);
             player.Hit(Card.Five);
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.Six);
             dealer.Hit(Card.Two);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Win, result.GameResult);
+            Assert.AreEqual(GameResult.Win, result.Result);
             // 19 vs 19
             player = MockPlayerStrategy.Build(Card.Seven, Card.Seven);
             player.Hit(Card.Five);
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.Six);
             dealer.Hit(Card.Three);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Push, result.GameResult);
+            Assert.AreEqual(GameResult.Push, result.Result);
             // 20 vs 19
             dealer = StrategyFactory.BuildDealer(Card.Jack, Card.King);
             player = MockPlayerStrategy.Build(Card.Ace, Card.Two);
             player.Hit(Card.Six);
             result = judgement.GamePayoutResult(dealer, player);
-            Assert.AreEqual(GameResult.Lose, result.GameResult);
+            Assert.AreEqual(GameResult.Lose, result.Result);
         }
     }
 }

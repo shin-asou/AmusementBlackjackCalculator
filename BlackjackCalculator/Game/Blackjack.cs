@@ -66,18 +66,33 @@ namespace BlackjackCalculator.Game
         // Flow
         public void Flow()
         {
-            var record = CreateBlackjackRecord(10);
+            var rule = RuleFactory.BuildBasicRule();
+            // var rule = RuleFactory.Build(RuleFactory.BuildAllValidHandPayoutTable(), isMadeBySplitBlackjackPayoutAddon: true);        
+            var result = new List<BoxPayout>();
+            for (int i = 0; i < 180; i++)
+            {
+                var shooter = ShooterFactory.BuildShooter(rule.DeckCount, rule.EndDeckCount);
+                result.AddRange(ShooterSequence(rule, shooter));
+            }
+        }
+
+        private static List<BoxPayout> ShooterSequence(RuleSet rule, Shooter shooter)
+        {
             bool isLastGame = false;
             bool canGame = true;
+            var result = new List<BoxPayout>();
             // shooterからカードを引ける限りゲームを続行
             while (canGame)
             {
-                GameSequence(record.Rule, record.Dealer, record.Players, record.Shooter);
-                if (isLastGame) canGame = false;
-                isLastGame = true; // 今は次のゲーム用の処理がないので強制的に抜けるようにしておく
+                var boxes = FirstDeal(rule, shooter, 1);
+                var dealer = PullDealerStrategy(boxes);
+                var players = CastListAbstractStrategy2PlayerStrategy(boxes);
+                result.AddRange(GameSequence(rule, dealer, players, shooter));
+                if (isLastGame) return result;
                 // cutCard判定 ゲーム終了時に次がカットカードだったらもしくはすでに出てる場合は次のゲームを終了とする
-                if (!isLastGame) isLastGame = record.Shooter.IsEndGame;
+                if (!isLastGame) isLastGame = shooter.IsEndGame;
             }
+            return result;
         }
 
         // TODO: ↓
@@ -87,16 +102,29 @@ namespace BlackjackCalculator.Game
         // PlayersAction プレイヤースプリット処理
         // PlayerAction プレイヤーごとのアクション
         // DealerAction ディーラーアクション
-        // ---- 結果に応じて配当
-        public static List<PlayerStrategy> GameSequence(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
+        // Payout 結果に応じて配当
+        public static List<BoxPayout> GameSequence(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players, Shooter shooter)
         {
             // DealerBlackjack + Early Surrender Check
             DealerPreAction(rule, dealer, players);
-            var result = PlayersAction(rule, dealer, players, shooter);
+            var playerActionList = PlayersAction(rule, dealer, players, shooter);
             DealerAction(dealer, shooter);
+            var result = Payout(rule, dealer, playerActionList);
+
             // 現在は暫定的にプレイヤーリストを返すが最終的には配当リストを返す
             return result;
         }
+        public static List<BoxPayout> Payout(RuleSet rule, DealerStrategy dealer, List<PlayerStrategy> players)
+        {
+            var result = new List<BoxPayout>();
+            var judgement = new Judgment(rule);
+            foreach (var player in players)
+            {
+                result.Add(judgement.GamePayoutResult(dealer, player));
+            }
+            return result;
+        }
+
 
         public static void DealerAction(DealerStrategy dealer, Shooter shooter)
         {
