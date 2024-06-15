@@ -14,6 +14,9 @@ namespace BlackjackCalculator.Strategy
         public bool IsEvenMoney => PreActionResult == GamePreAction.EvenMoney;
         public bool IsInsurance => PreActionResult == GamePreAction.Insurance;
         public bool IsPreActionSurrender => PreActionResult == GamePreAction.Surrender;
+        public bool IsMadeBySplitAcesBlackjack => Hand.IsMadeByAcesSplit && Hand.IsBlackjack;
+        public bool IsDoubleDown => Hand.IsDoubleDown;
+
         // Player は必ずupCardを知っているためupCardを取らないメソッドをサポートしない
         public override HandAction Action() => throw new NotSupportedException();
         public override HandAction Action(Card upCard)
