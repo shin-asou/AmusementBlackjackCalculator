@@ -1,4 +1,6 @@
-﻿using BlackjackCalculator.Factory;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BlackjackCalculator.Game;
+using BlackjackCalculator.Factory;
 using BlackjackCalculator.Item;
 
 namespace BlackjackCalculator.Game.Tests
@@ -88,6 +90,104 @@ namespace BlackjackCalculator.Game.Tests
             hand = HandFactory.Build(Card.Jack, Card.Queen);
             Assert.IsFalse(hand.IsBlackjack);
             Assert.IsFalse(CreateNotBlackjack21().IsBlackjack);
+        }
+        [TestMethod()]
+        public void IsStraightTest()
+        {
+            var hand = HandFactory.Build(Card.Eight, Card.Six);
+            hand.Hit(Card.Seven);
+            Assert.IsTrue(hand.IsStraight);
+            hand = HandFactory.Build(Card.Eight, Card.Six);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Five);
+            Assert.IsFalse(hand.IsStraight);
+            hand = HandFactory.Build(Card.Nine, Card.Five);
+            hand.Hit(Card.Seven);
+            Assert.IsFalse(hand.IsStraight);
+        }
+        [TestMethod()]
+        public void IsThreeSevenTest()
+        {
+            var hand = HandFactory.Build(Card.Seven, Card.Seven);
+            hand.Hit(Card.Seven);
+            Assert.IsTrue(hand.IsThreeSeven);
+            hand = HandFactory.Build(Card.Six, Card.Six);
+            hand.Hit(Card.Six);
+            Assert.IsFalse(hand.IsStraight);
+            hand = HandFactory.Build(Card.Seven, Card.Seven);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Five);
+            Assert.IsFalse(hand.IsThreeSeven);
+        }
+        [TestMethod()]
+        public void IsSixUnderTest()
+        {
+            var hand = HandFactory.Build(Card.Two, Card.Three);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Two);
+            Assert.IsTrue(hand.IsSixUnder);
+            hand = HandFactory.Build(Card.Two, Card.Three);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Queen);
+            Assert.IsFalse(hand.IsSixUnder);
+        }
+        [TestMethod()]
+        public void IsSevenUnderTest()
+        {
+            var hand = HandFactory.Build(Card.Two, Card.Three);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Ace);
+            Assert.IsTrue(hand.IsSevenUnder);
+            hand = HandFactory.Build(Card.Two, Card.Three);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Queen);
+            Assert.IsFalse(hand.IsSevenUnder);
+        }
+        [TestMethod()]
+        public void IsEightUnderTest()
+        {
+            var hand = HandFactory.Build(Card.Two, Card.Three);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Ace);
+            Assert.IsTrue(hand.IsEightUnder);
+            hand = HandFactory.Build(Card.Two, Card.Three);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Ace);
+            hand.Hit(Card.Queen);
+            Assert.IsFalse(hand.IsEightUnder);
+        }
+        [TestMethod()]
+        public void IsAce2SixTest()
+        {
+            var hand = HandFactory.Build(Card.Ace, Card.Two);
+            hand.Hit(Card.Three);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Five);
+            hand.Hit(Card.Six);
+            Assert.IsTrue(hand.IsAce2Six);
+            hand = HandFactory.Build(Card.Six, Card.Five);
+            hand.Hit(Card.Four);
+            hand.Hit(Card.Three);
+            hand.Hit(Card.Two);
+            hand.Hit(Card.Ace);
+            Assert.IsTrue(hand.IsAce2Six);
         }
         [TestMethod()]
         public void IsDealerStandTest()
