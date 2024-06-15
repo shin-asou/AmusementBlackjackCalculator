@@ -40,6 +40,8 @@ namespace BlackjackCalculator.Game
         LoseBySurrender,
         Push,
         WinBySixUnder,
+        WinBySevenUnder,
+        WinByEightUnder,
         WinByStraight,
         WinByThreeSeven,
         WinByAce2Six

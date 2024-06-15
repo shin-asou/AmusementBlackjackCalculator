@@ -22,7 +22,9 @@ namespace BlackjackCalculator.Game
         public bool IsPair => FirstDeal && FirstCard.Type == SecondCard.Type;
         // Aceを含みAce1枚を除いた合計が10以下、つまりAceを11として扱った場合でも21以下になる状態をソフトハンドと判定
         public bool IsSoft => ExistsAce && (CalculateValueExcludeSoftHandAce() <= 10);
-        public bool IsDealerStand => Value() >= 17;
+        public int DealerStandValue => 17;
+        public bool IsSoftDealerStandValue => IsSoft && Value() == DealerStandValue;
+        public bool IsDealerStand => Value() >= DealerStandValue;
         public bool IsBlackjack => FirstDeal && Value() == 21;
         public bool IsBurst => Value() > 21;
 

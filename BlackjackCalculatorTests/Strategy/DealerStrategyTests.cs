@@ -30,6 +30,17 @@ namespace BlackjackCalculator.Strategy.Tests
             Assert.AreEqual(HandAction.Hit, dealer.Action());
             dealer.Hit(Card.Six);
             Assert.AreEqual(HandAction.Stand, dealer.Action());
+
+            // DealerSoftHand17 Hit
+            dealer = StrategyFactory.BuildDealer(Card.Six, Card.Ace, RuleFactory.Build(RuleFactory.BuildBasicPayoutTable(), isStandValueDealerSoftHand: false));
+            Assert.AreEqual(HandAction.Hit, dealer.Action());
+            dealer = StrategyFactory.BuildDealer(Card.Two, Card.Ace, RuleFactory.Build(RuleFactory.BuildBasicPayoutTable(), isStandValueDealerSoftHand: false));
+            dealer.Hit(Card.Four);
+            Assert.AreEqual(HandAction.Hit, dealer.Action());
+            // DealerSoftHand17 Hit Hardhand
+            dealer = StrategyFactory.BuildDealer(Card.Ten, Card.Seven, RuleFactory.Build(RuleFactory.BuildBasicPayoutTable(), isStandValueDealerSoftHand: false));
+            Assert.AreEqual(HandAction.Stand, dealer.Action());
+
         }
         [TestMethod()]
         public void ResultTest()
