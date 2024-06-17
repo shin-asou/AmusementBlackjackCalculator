@@ -15,9 +15,9 @@ namespace BlackjackCalculator.Strategy
         {
             var result = new Dictionary<int, FrozenDictionary<int, HandAction>>
             {
-                { 11, BuildSoftHandStrategy9to11() },
-                { 10, BuildSoftHandStrategy9to11() },
-                { 9, BuildSoftHandStrategy9to11() },
+                { 11, BuildSoftHandStrategy11() },
+                { 10, BuildSoftHandStrategy9to10() },
+                { 9, BuildSoftHandStrategy9to10() },
                 { 8, BuildSoftHandStrategy7to8() },
                 { 7, BuildSoftHandStrategy7to8() },
                 { 6, BuildSoftHandStrategy5to6() },
@@ -29,8 +29,24 @@ namespace BlackjackCalculator.Strategy
             return result.ToFrozenDictionary();
         }
 
-        // upCard 11 to 9
-        private static FrozenDictionary<int, HandAction> BuildSoftHandStrategy9to11()
+        // upCard 11
+        private static FrozenDictionary<int, HandAction> BuildSoftHandStrategy11()
+        {
+            var result = new Dictionary<int, HandAction>
+            {
+                { 1, HandAction.Hit },
+                { 2, HandAction.Hit },
+                { 3, HandAction.Hit },
+                { 4, HandAction.Hit },
+                { 5, HandAction.Hit },
+                { 6, HandAction.Hit },
+                { 7, HandAction.Hit },
+                { 8, HandAction.Stand },
+            };
+            return result.ToFrozenDictionary();
+        }
+        // upCard 10 to 9
+        private static FrozenDictionary<int, HandAction> BuildSoftHandStrategy9to10()
         {
             var result = new Dictionary<int, HandAction>
             {
@@ -72,7 +88,7 @@ namespace BlackjackCalculator.Strategy
                 { 4, HandAction.HitOrDoubleDown },
                 { 5, HandAction.HitOrDoubleDown },
                 { 6, HandAction.HitOrDoubleDown },
-                { 7, HandAction.HitOrDoubleDown },
+                { 7, HandAction.StandOrDoubleDown },
                 { 8, HandAction.Stand },
             };
             return result.ToFrozenDictionary();
@@ -88,7 +104,7 @@ namespace BlackjackCalculator.Strategy
                 { 4, HandAction.HitOrDoubleDown },
                 { 5, HandAction.HitOrDoubleDown },
                 { 6, HandAction.HitOrDoubleDown },
-                { 7, HandAction.HitOrDoubleDown },
+                { 7, HandAction.StandOrDoubleDown },
                 { 8, HandAction.Stand },
             };
             return result.ToFrozenDictionary();
@@ -104,12 +120,12 @@ namespace BlackjackCalculator.Strategy
                 { 4, HandAction.Hit },
                 { 5, HandAction.Hit },
                 { 6, HandAction.HitOrDoubleDown },
-                { 7, HandAction.HitOrDoubleDown },
+                { 7, HandAction.StandOrDoubleDown },
                 { 8, HandAction.Stand },
             };
             return result.ToFrozenDictionary();
         }
-        // upCard 3
+        // upCard 2
         private static FrozenDictionary<int, HandAction> BuildSoftHandStrategy2()
         {
             var result = new Dictionary<int, HandAction>
@@ -120,7 +136,7 @@ namespace BlackjackCalculator.Strategy
                 { 4, HandAction.Hit },
                 { 5, HandAction.Hit },
                 { 6, HandAction.Hit },
-                { 7, HandAction.Stand },
+                { 7, HandAction.Hit },
                 { 8, HandAction.Stand },
             };
             return result.ToFrozenDictionary();
