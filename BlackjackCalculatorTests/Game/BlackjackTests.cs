@@ -24,7 +24,8 @@ namespace BlackjackCalculator.Game.Tests
             var rule = RuleFactory.BuildBasicRule();
             var shooter = ShooterFactory.BuildShooter(rule.DeckCount, rule.EndDeckCount);
             var boxCount = 4;
-            var strategies = Blackjack.FirstDeal(rule, shooter, boxCount);
+            var game = new Blackjack(rule);
+            var strategies = game.FirstDeal(shooter, boxCount);
             Assert.AreEqual((boxCount + 1), strategies.Count);
             // 先頭はDealerStrategyで残りはPlayerStrategyである(もしくはその継承クラス)
             for (int i = 0; i < strategies.Count; i++)
@@ -40,14 +41,15 @@ namespace BlackjackCalculator.Game.Tests
             var rule = RuleFactory.BuildBasicRule();
             var shooter = ShooterFactory.BuildShooter(rule.DeckCount, rule.EndDeckCount);
             var player = MockPlayerStrategy.Build(Card.Ten, Card.Queen);
-            Assert.AreEqual(HandAction.Stand, Blackjack.PlayerAction(rule, player, Card.Ten, shooter));
+            var game = new Blackjack(rule);
+            Assert.AreEqual(HandAction.Stand, game.PlayerAction(player, Card.Ten, shooter));
             // BJ => stand
             player = MockPlayerStrategy.Build(Card.Ten, Card.Ace, notPairAction: HandAction.Hit);
-            Assert.AreEqual(HandAction.Stand, Blackjack.PlayerAction(rule, player, Card.Ten, shooter));
+            Assert.AreEqual(HandAction.Stand, game.PlayerAction(player, Card.Ten, shooter));
 
             player = MockPlayerStrategy.Build(Card.Nine, Card.Five, notPairAction: HandAction.Hit);
             player.Hit(Card.Queen);
-            Assert.AreEqual(HandAction.Stand, Blackjack.PlayerAction(rule, player, Card.Ten, shooter));
+            Assert.AreEqual(HandAction.Stand, game.PlayerAction(player, Card.Ten, shooter));
         }
 
         [TestMethod()]
@@ -79,8 +81,8 @@ namespace BlackjackCalculator.Game.Tests
             players.Add(StrategyFactory.BuildBasic(shooter.Pull(), shooter.Pull()));
             players.Add(StrategyFactory.BuildBasic(shooter.Pull(), shooter.Pull()));
             players.Add(StrategyFactory.BuildBasic(shooter.Pull(), shooter.Pull()));
-
-            var result = Blackjack.PlayersAction(rule, dealer, players, shooter);
+            var game = new Blackjack(rule);
+            var result = game.PlayersAction(dealer, players, shooter);
             Assert.AreEqual(8, result.Count);
         }
 

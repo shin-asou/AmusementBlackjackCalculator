@@ -15,10 +15,11 @@ namespace BlackjackCalculator.Strategy
         }
 
         // ストラテジー表参照メソッド　２次元連想配列を作りやすいようにKey Valueを作ってしまったので利用するときのミスを避けるためにラップする
-        private HandAction ReferenceHardHandStrategy(Card upCard) => hardHandStrategy[upCard.Value][ClampHardHandValue(Hand.Value())];
-        private HandAction ReferenceSoftHandStrategy(Card upCard) => softHandStrategy[upCard.Value][ClampSoftHandValue(Hand.SoftHandPairValue())];
+        // TODO: TrueStrategyのために一時的にprotectedにしている本来は個別にストラテジー表を作るべきのはず
+        protected HandAction ReferenceHardHandStrategy(Card upCard) => hardHandStrategy[upCard.Value][ClampHardHandValue(Hand.Value())];
+        protected HandAction ReferenceSoftHandStrategy(Card upCard) => softHandStrategy[upCard.Value][ClampSoftHandValue(Hand.SoftHandPairValue())];
         // ペアハンドの場合はどちらも同じカードのはずなので適当にupCardの値を取るとした
         // このメソッドもペアハンド以外で呼び出せないメソッドになってしまった
-        private HandAction ReferencePairHandStrategy(Card upCard) => pairHandStrategy[Hand.UpCard.Value][upCard.Value];
+        protected HandAction ReferencePairHandStrategy(Card upCard) => pairHandStrategy[Hand.UpCard.Value][upCard.Value];
     }
 }
