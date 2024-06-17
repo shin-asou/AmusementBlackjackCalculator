@@ -62,7 +62,7 @@ namespace BlackjackCalculator.Game
 
         private GameResult JudgeValidSpecialHand(GameResult gameResult, DealerStrategy dealer, PlayerStrategy player)
         {
-            if (gameResult == GameResult.WinByBlackjack && player.IsMadeBySplitAcesBlackjack && !Rule.IsMadeBySplitBlackjackPayoutAddon) return GameResult.Win;
+            if (gameResult == GameResult.WinByBlackjack && player.IsMadeBySplitAcesBlackjack && !Rule.IsMadeBySplitBlackjackNatural) return JudgeValueOnly(dealer, player);
             return Rule.ResultPayout[gameResult].Valid ? gameResult : JudgeValueOnly(dealer, player);
         }
 
