@@ -41,22 +41,22 @@ namespace BlackjackCalculator.Game
         public bool IsSixUnder => Count == 6 && !IsBurst;
         public bool IsSevenUnder => Count == 7 && !IsBurst;
         public bool IsEightUnder => Count >= 8 && !IsBurst;
-        public bool IsAce2Six
-        {
-            get
-            {
-                return Count == 6 &&
-                    Cards.Any(c => c.IsAce) &&
-                    Cards.Any(c => c.Type == Kind.Two) &&
-                    Cards.Any(c => c.Type == Kind.Three) &&
-                    Cards.Any(c => c.Type == Kind.Four) &&
-                    Cards.Any(c => c.Type == Kind.Five) &&
-                    Cards.Any(c => c.Type == Kind.Six);
-            }
-        }
+        public bool IsAce2Six => Count == 6 && CountForAceToSix() == 6;
+        public bool IsReachAce2Six => Count == 5 && CountForAceToSix() == 5;
         public bool IsSpecial => IsBlackjack || IsStraight || IsThreeSeven || IsSixUnder || IsSevenUnder || IsEightUnder || IsAce2Six;
-
         public bool IsBurst => Value() > 21;
+
+        private int CountForAceToSix()
+        {
+            var count = 0;
+            if (Cards.Any(c => c.IsAce)) count++;
+            if (Cards.Any(c => c.Type == Kind.Two)) count++;
+            if (Cards.Any(c => c.Type == Kind.Three)) count++;
+            if (Cards.Any(c => c.Type == Kind.Four)) count++;
+            if (Cards.Any(c => c.Type == Kind.Five)) count++;
+            if (Cards.Any(c => c.Type == Kind.Six)) count++;
+            return count;
+        }
 
         public void Hit(Card newCard) => Cards.Add(newCard);
         public void DoubleDown(Card newCard)
@@ -65,6 +65,11 @@ namespace BlackjackCalculator.Game
             Hit(newCard);
         }
 
+        // Aceを限界まで1として計算する
+        public int MinValue()
+        {
+            return CalculateValueMinValue();
+        }
         public int SoftHandPairValue()
         {
             if (!IsSoft) { throw new InvalidOperationException("this method call prerequisites IsSoft == true"); }
@@ -78,7 +83,6 @@ namespace BlackjackCalculator.Game
         // (CalculateValueExcludeSoftHandAce) Ace以外のすべてのカードの合計を計算 
         // Aceが2枚以上ある場合2枚目以降は必ず1として扱うのですべてのAceの枚数から1を引くことで1or11の計算が必要なカード以外が計算可能 (ただしこの処理より前にAceを含んでいるかをチェックしている前提
         // 最後にAceを1で扱うべきか11で扱うべきかを処理する
-        // TODO: Playerのxunder役とAce2Sixをまだ計算していない
         private int CalculateValueIsContainAce()
         {
             var value = CalculateValueExcludeSoftHandAce();
@@ -88,6 +92,11 @@ namespace BlackjackCalculator.Game
         {
             var value = Cards.Where(card => !card.IsAce).Sum(card => card.Value);
             return value + (Cards.Count(card => card.IsAce) - 1);
+        }
+        private int CalculateValueMinValue()
+        {
+            var value = Cards.Where(card => !card.IsAce).Sum(card => card.Value);
+            return value + Cards.Count(card => card.IsAce);
         }
     }
 }
