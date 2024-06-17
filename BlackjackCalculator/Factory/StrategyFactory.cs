@@ -11,6 +11,7 @@ namespace BlackjackCalculator.Factory
         public static BasicStrategy BuildBasic(Card first, Card second) => BuildBasic(first, second, RuleFactory.BuildBasicRule(), 0);
         public static BasicStrategy BuildBasic(Card first, Card second, RuleSet rule) => BuildBasic(first, second, rule, 0);
         public static BasicStrategy BuildBasic(Card first, Card second, RuleSet rule, int splitCount) => new(HandFactory.Build(first, second, splitCount), rule);
+        public static TrueH3ALStrategy BuildTrueH3AL(Card first, Card second, RuleSet rule, int splitCount) => new(HandFactory.Build(first, second, splitCount), rule);
 
         public static PlayerStrategy BuildNullPlayer(Card first, int splitCount) => new NullPlayerStrategy(HandFactory.Build(first, first, splitCount), RuleFactory.BuildBasicRule());
     }

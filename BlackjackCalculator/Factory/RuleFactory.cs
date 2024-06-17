@@ -5,6 +5,23 @@ namespace BlackjackCalculator.Factory
 {
     public static class RuleFactory
     {
+        // 葛西H3ALルール
+        // https://x.com/AmusementH3al
+        public static RuleSet BuildH3ALRule()
+        {
+            return new RuleSet(
+                isStandValueDealerSoftHand: true,
+                canDoubledownAfterSplit: true,
+                maxSplit: 4,
+                canResplitAces: false,
+                canHitSplitAces: false,
+                isMadeBySplitBlackjackNatural: true,
+                doubledown: DoubledownType.AnyTwoCard,
+                surrenderType: SurrenderType.Late,
+                payoutTable: BuildAllValidHandPayoutTable(),
+                deckCount: 6,
+                endDeckCount: 1);
+        }
         public static RuleSet BuildBasicRule()
         {
             return new RuleSet(

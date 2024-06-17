@@ -5,8 +5,8 @@ namespace BlackjackCalculator.Game
     public class BoxPayout(RuleSet rule, DealerStrategy dealer, PlayerStrategy player, GameResult result, decimal betSize = 600m)
     {
         protected RuleSet Rule { get; } = rule;
-        protected DealerStrategy Dealer { get; } = dealer;
-        protected PlayerStrategy Player { get; } = player;
+        public DealerStrategy Dealer { get; } = dealer;
+        public PlayerStrategy Player { get; } = player;
         public bool IsSuccessInsurance { get; set; } = false;
         protected decimal BetSize { get; } = betSize;
 
