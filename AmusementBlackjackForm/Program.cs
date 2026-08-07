@@ -12,7 +12,7 @@ namespace AmusementBlackjackForm
         [STAThread]
         static void Main()
         {
-            var game = new Blackjack();
+            var game = new Blackjack(RuleFactory.BuildBasicRule());
             game.Flow();
             var judgement = new Judgment(RuleFactory.BuildBasicRule());
             var dealer = StrategyFactory.BuildDealer(Card.Ace, Card.Ten);
